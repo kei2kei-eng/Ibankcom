@@ -1,0 +1,202 @@
+======================================================================
+🏦 AI INVESTMENT BANK — HOURLY REPORT
+   2026-06-08 09:47  |  09:47 (Cycle #1)
+   Cycle #1
+======================================================================
+
+📰 MARKET OVERVIEW (Regime: NEUTRAL)
+----------------------------------------------------------------------
+Market overview unavailable. Run with OpenAI API key for AI-generated analysis.
+
+======================================================================
+🎯 ACTION SUMMARY — THIS HOUR
+======================================================================
+
+  🟡 HOLD (5): BRK-B, MRK, MRVL, MS, WFC
+
+======================================================================
+📊 TOP 50 RANKED STOCKS
+======================================================================
+  # Ticker       Price    Chg%  Score   RSI Rec              
+----------------------------------------------------------------------
+  1 ABM     $    42.54  +6.67%  136.0    68 BULLISH          
+  2 MRK     $   120.79  +0.44%  133.0    60 BULLISH          
+  3 MS      $   211.93  -2.90%  129.0    65 BULLISH          
+  4 SPG     $   210.31  +1.98%  129.0    64 BULLISH          
+  5 ARGX    $   891.32  +5.82%  126.0    68 BULLISH          
+  6 BRK-B   $   488.13  +1.98%  123.0    60 BULLISH          
+  7 MRVL    $   263.47 -16.74%  120.0    65 BULLISH          
+  8 ALL     $   221.01  +4.82%  116.0    61 BULLISH          
+  9 WFC     $    81.94  +0.39%  113.0    64 BULLISH          
+ 10 BAC     $    53.83  -0.11%  113.0    65 BULLISH          
+ 11 PSA     $   309.68  +0.98%  113.0    57 BULLISH          
+ 12 JPM     $   312.37  +0.48%  113.0    60 BULLISH          
+ 13 TJX     $   160.71  +1.31%  113.0    61 BULLISH          
+ 14 LLY     $  1131.42  +0.55%  113.0    69 BULLISH          
+ 15 ROST    $   230.37  -1.15%  113.0    56 BULLISH          
+ 16 COO     $    67.34  +8.58%  110.0    66 BULLISH          
+ 17 TTAN    $    77.40  +4.13%  110.0    68 BULLISH          
+ 18 KO      $    79.48  +3.46%  109.0    51 BULLISH          
+ 19 PLD     $   144.54  +0.52%  109.0    55 BULLISH          
+ 20 UNH     $   399.47  +0.76%  109.0    68 BULLISH          
+ 21 ARCB    $   155.09  +6.17%  106.0    82 BULLISH          
+ 22 PG      $   146.54  +4.09%  103.0    56 BULLISH          
+ 23 ADBE    $   251.44  -2.70%  103.0    50 BULLISH          
+ 24 PGR     $   204.02  +4.42%   99.0    58 BULLISH          
+ 25 MSTR    $   120.44  -6.90%   99.0    29 BULLISH          
+ 26 HCA     $   372.13  +2.85%   99.0    27 BULLISH          
+ 27 PYPL    $    41.29  -3.42%   99.0    29 BULLISH          
+ 28 CRM     $   185.66  -1.64%   97.0    51 BULLISH          
+ 29 ABBV    $   227.23  +1.02%   97.0    69 BULLISH          
+ 30 JNJ     $   232.77  +2.02%   97.0    58 BULLISH          
+ 31 SPGI    $   424.44  +1.03%   97.0    53 BULLISH          
+ 32 AMGN    $   349.58  +1.15%   97.0    62 BULLISH          
+ 33 LRCX    $   303.28  -9.85%   97.0    51 BULLISH          
+ 34 DELL    $   394.39  -6.55%   97.0    68 BULLISH          
+ 35 AMT     $   194.12  +0.11%   97.0    67 BULLISH          
+ 36 ORCL    $   213.68  -9.59%   97.0    56 BULLISH          
+ 37 RLI     $    52.38  +4.03%   96.0    60 BULLISH          
+ 38 AAPL    $   307.34  -1.25%   95.0    61 BULLISH          
+ 39 REGN    $   635.45  +1.07%   93.0    41 BULLISH          
+ 40 ZTS     $    79.44  -0.10%   93.0    33 BULLISH          
+ 41 GS      $  1038.68  -4.94%   93.0    61 BULLISH          
+ 42 ACN     $   178.25  -0.34%   93.0    48 BULLISH          
+ 43 UPS     $   108.54  -1.52%   93.0    64 BULLISH          
+ 44 SCHW    $    88.84  +0.95%   93.0    48 BULLISH          
+ 45 DUK     $   124.22  +1.97%   93.0    51 BULLISH          
+ 46 HCI     $   156.98  +4.49%   92.0    55 BULLISH          
+ 47 EHC     $   104.01  +4.18%   92.0    50 BULLISH          
+ 48 EQIX    $  1080.95  -0.75%   89.0    56 BULLISH          
+ 49 GILD    $   129.16  -0.02%   89.0    42 BULLISH          
+ 50 CAT     $   904.28  -3.85%   89.0    55 BULLISH          
+
+======================================================================
+🔍 DEEP ANALYSIS: Berkshire Hathaway Inc. (BRK-B)
+======================================================================
+  CEO Decision: HOLD (confidence: 0%)
+  Risk Level: HIGH
+  Consensus: N/A
+
+  CEO Reasoning:
+  LLM unavailable - defaulting to HOLD for safety
+
+  Agent Votes:
+    Market Analyst      : HOLD  (conf: 0%, risk: HIGH)
+    News Analyst        : HOLD  (conf: 0%, risk: HIGH)
+    Quant Analyst       : HOLD  (conf: 0%, risk: HIGH)
+    Risk Manager        : HOLD  (conf: 0%, risk: HIGH)
+
+  Technicals:
+    RSI: 60 | MACD: 0.3466 | Beta: 0.617
+    SMA50: $476.81 | SMA200: $nan
+    P/E: 14.53633 | Analyst: buy
+    52W Range: $455.19 - $516.85
+
+  News Sentiment: NEUTRAL (0.00)
+
+======================================================================
+🔍 DEEP ANALYSIS: Merck & Co., Inc. (MRK)
+======================================================================
+  CEO Decision: HOLD (confidence: 0%)
+  Risk Level: HIGH
+  Consensus: N/A
+
+  CEO Reasoning:
+  LLM unavailable - defaulting to HOLD for safety
+
+  Agent Votes:
+    Market Analyst      : HOLD  (conf: 0%, risk: HIGH)
+    News Analyst        : HOLD  (conf: 0%, risk: HIGH)
+    Quant Analyst       : HOLD  (conf: 0%, risk: HIGH)
+    Risk Manager        : HOLD  (conf: 0%, risk: HIGH)
+
+  Technicals:
+    RSI: 60 | MACD: 1.1697 | Beta: 0.218
+    SMA50: $116.18 | SMA200: $nan
+    P/E: 34.025352 | Analyst: buy
+    52W Range: $76.66 - $125.14
+
+  News Sentiment: NEUTRAL (0.00)
+
+======================================================================
+🔍 DEEP ANALYSIS: Marvell Technology, Inc. (MRVL)
+======================================================================
+  CEO Decision: HOLD (confidence: 0%)
+  Risk Level: HIGH
+  Consensus: N/A
+
+  CEO Reasoning:
+  LLM unavailable - defaulting to HOLD for safety
+
+  Agent Votes:
+    Market Analyst      : HOLD  (conf: 0%, risk: HIGH)
+    News Analyst        : HOLD  (conf: 0%, risk: HIGH)
+    Quant Analyst       : HOLD  (conf: 0%, risk: HIGH)
+    Risk Manager        : HOLD  (conf: 0%, risk: HIGH)
+
+  Technicals:
+    RSI: 65 | MACD: 33.5144 | Beta: 2.277
+    SMA50: $165.34 | SMA200: $nan
+    P/E: 90.85172 | Analyst: strong_buy
+    52W Range: $61.44 - $324.20
+
+  News Sentiment: NEUTRAL (0.00)
+
+======================================================================
+🔍 DEEP ANALYSIS: Morgan Stanley (MS)
+======================================================================
+  CEO Decision: HOLD (confidence: 0%)
+  Risk Level: HIGH
+  Consensus: N/A
+
+  CEO Reasoning:
+  LLM unavailable - defaulting to HOLD for safety
+
+  Agent Votes:
+    Market Analyst      : HOLD  (conf: 0%, risk: HIGH)
+    News Analyst        : HOLD  (conf: 0%, risk: HIGH)
+    Quant Analyst       : HOLD  (conf: 0%, risk: HIGH)
+    Risk Manager        : HOLD  (conf: 0%, risk: HIGH)
+
+  Technicals:
+    RSI: 65 | MACD: 7.2455 | Beta: 1.221
+    SMA50: $188.59 | SMA200: $nan
+    P/E: 19.196558 | Analyst: buy
+    52W Range: $127.34 - $218.30
+
+  News Sentiment: NEUTRAL (0.00)
+
+======================================================================
+🔍 DEEP ANALYSIS: Wells Fargo & Company (WFC)
+======================================================================
+  CEO Decision: HOLD (confidence: 0%)
+  Risk Level: HIGH
+  Consensus: N/A
+
+  CEO Reasoning:
+  LLM unavailable - defaulting to HOLD for safety
+
+  Agent Votes:
+    Market Analyst      : HOLD  (conf: 0%, risk: HIGH)
+    News Analyst        : HOLD  (conf: 0%, risk: HIGH)
+    Quant Analyst       : HOLD  (conf: 0%, risk: HIGH)
+    Risk Manager        : HOLD  (conf: 0%, risk: HIGH)
+
+  Technicals:
+    RSI: 64 | MACD: 0.4635 | Beta: 0.93
+    SMA50: $78.98 | SMA200: $nan
+    P/E: 12.664607 | Analyst: buy
+    52W Range: $71.93 - $97.76
+
+  News Sentiment: NEUTRAL (0.00)
+
+======================================================================
+📚 LEARNING INSIGHTS
+======================================================================
+No previous hour data available for learning.
+
+======================================================================
+⚠️  This is AI-generated analysis for reference only.
+   Not financial advice. Always do your own research.
+   Hourly report — Next update in ~60 minutes.
+======================================================================

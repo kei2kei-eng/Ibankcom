@@ -1,0 +1,448 @@
+2026-06-08 09:46:52,446 [WARNING] ⚠️  No API key — will use rules-only mode (no deep AI analysis)
+2026-06-08 09:46:52,456 [INFO] Decision journal initialized at decision_journal.db
+2026-06-08 09:46:52,456 [INFO] 🏦 AI Investment HOURLY Report System ready!
+2026-06-08 09:46:52,457 [INFO]    Model: gpt-4o
+2026-06-08 09:46:52,457 [INFO]    Mode: Hourly reports during market hours
+2026-06-08 09:46:52,457 [INFO] 
+🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞
+2026-06-08 09:46:52,457 [INFO] 🏦 HOURLY REPORT — Cycle #1 — 2026-06-08 09:46
+2026-06-08 09:46:52,457 [INFO] 🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞
+2026-06-08 09:46:52,457 [INFO] 📊 Step 0: Reviewing previous hour's decisions...
+2026-06-08 09:46:52,457 [INFO] 🌍 Step 1: Discovering stocks from the market...
+2026-06-08 09:46:52,457 [INFO] 🌍 Stock Discovery Engine — Scanning the entire US market...
+2026-06-08 09:46:52,457 [INFO]   📊 Strategy 1: Fetching S&P 500 + Nasdaq 100 constituents...
+2026-06-08 09:46:52,609 [WARNING] Wikipedia S&P 500 unavailable (HTTP Error 403: Forbidden), using built-in list of 110 stocks
+2026-06-08 09:46:52,674 [WARNING] Wikipedia Nasdaq 100 unavailable (HTTP Error 403: Forbidden), using built-in list
+2026-06-08 09:46:52,675 [INFO]      → 115 unique index stocks
+2026-06-08 09:46:52,675 [INFO]   🚀 Strategy 2: Scanning today's top gainers...
+2026-06-08 09:46:52,798 [INFO] Top gainers: found 30 stocks
+2026-06-08 09:46:52,799 [INFO]      → 30 top gainers
+2026-06-08 09:46:52,799 [INFO]   📉 Strategy 3: Scanning today's top losers (oversold opportunities)...
+2026-06-08 09:46:52,918 [INFO] Top losers: found 15 stocks
+2026-06-08 09:46:52,920 [INFO]      → 15 oversold candidates
+2026-06-08 09:46:52,920 [INFO]   🏭 Strategy 4: Scanning sector leaders...
+2026-06-08 09:46:53,924 [INFO] Sector performers: found 0 stocks across 11 sectors
+2026-06-08 09:46:53,925 [INFO]      → 0 sector leaders
+2026-06-08 09:46:53,925 [INFO]   📦 Strategy 5: Scanning for unusual volume...
+2026-06-08 09:46:59,538 [ERROR] $MMC: possibly delisted; no price data found  (period=1mo) (Yahoo error = "No data found, symbol may be delisted")
+2026-06-08 09:47:01,047 [INFO] Unusual volume: found 2 stocks out of 50 scanned
+2026-06-08 09:47:01,047 [INFO]      → 2 with unusual volume
+2026-06-08 09:47:01,047 [INFO]   💥 Strategy 6: Scanning for technical breakouts...
+2026-06-08 09:47:04,293 [ERROR] $SQ: possibly delisted; no price data found  (period=6mo) (Yahoo error = "No data found, symbol may be delisted")
+2026-06-08 09:47:04,293 [INFO] Breakout scanner: found 2 breakouts
+2026-06-08 09:47:04,294 [INFO]      → 2 breakout stocks
+2026-06-08 09:47:04,294 [INFO] 
+============================================================
+2026-06-08 09:47:04,294 [INFO] 🌍 DISCOVERY COMPLETE
+2026-06-08 09:47:04,294 [INFO]    Total unique stocks discovered: 156
+2026-06-08 09:47:04,294 [INFO]    Top 10 by discovery score:
+2026-06-08 09:47:04,294 [INFO]      MDLZ    score=3.0  methods=[index_constituent, breakout]
+2026-06-08 09:47:04,295 [INFO]      PGR     score=3.0  methods=[index_constituent, top_gainer]
+2026-06-08 09:47:04,295 [INFO]      AAPL    score=3.0  methods=[index_constituent, breakout]
+2026-06-08 09:47:04,295 [INFO]      PG      score=3.0  methods=[index_constituent, top_gainer]
+2026-06-08 09:47:04,295 [INFO]      CL      score=3.0  methods=[index_constituent, top_gainer]
+2026-06-08 09:47:04,295 [INFO]      MSTR    score=3.0  methods=[index_constituent, unusual_volume]
+2026-06-08 09:47:04,295 [INFO]      AVGO    score=3.0  methods=[index_constituent, unusual_volume]
+2026-06-08 09:47:04,295 [INFO]      MRVL    score=2.0  methods=[index_constituent, top_loser]
+2026-06-08 09:47:04,295 [INFO]      COO     score=2.0  methods=[top_gainer]
+2026-06-08 09:47:04,295 [INFO]      ABM     score=2.0  methods=[top_gainer]
+2026-06-08 09:47:04,295 [INFO] ============================================================
+2026-06-08 09:47:04,296 [INFO]    → Found 156 stocks
+2026-06-08 09:47:04,296 [INFO] 🔬 Step 2: Screening 156 stocks → Top 50...
+2026-06-08 09:47:04,296 [INFO] 🔬 Stock Screener scanning 156 discovered stocks...
+2026-06-08 09:47:12,959 [ERROR] $SQ: possibly delisted; no price data found  (period=6mo) (Yahoo error = "No data found, symbol may be delisted")
+2026-06-08 09:47:12,960 [WARNING] No data returned for SQ
+2026-06-08 09:47:15,838 [ERROR] $MMC: possibly delisted; no price data found  (period=6mo) (Yahoo error = "No data found, symbol may be delisted")
+2026-06-08 09:47:15,839 [WARNING] No data returned for MMC
+2026-06-08 09:47:34,445 [INFO]    Scored and ranked → Top 50 stocks:
+2026-06-08 09:47:34,445 [INFO]    # 1 ABM    score=136.0  RSI=68  $42.54  rec=BULLISH           ✗ SKIP
+2026-06-08 09:47:34,446 [INFO]    # 2 MRK    score=133.0  RSI=60  $120.79  rec=BULLISH           ✓ PASS
+2026-06-08 09:47:34,446 [INFO]    # 3 MS     score=129.0  RSI=65  $211.93  rec=BULLISH           ✓ PASS
+2026-06-08 09:47:34,446 [INFO]    # 4 SPG    score=129.0  RSI=64  $210.31  rec=BULLISH           ✗ SKIP
+2026-06-08 09:47:34,446 [INFO]    # 5 ARGX   score=126.0  RSI=68  $891.32  rec=BULLISH           ✗ SKIP
+2026-06-08 09:47:34,446 [INFO]    # 6 BRK-B  score=123.0  RSI=60  $488.13  rec=BULLISH           ✓ PASS
+2026-06-08 09:47:34,446 [INFO]    # 7 MRVL   score=120.0  RSI=65  $263.47  rec=BULLISH           ✓ PASS
+2026-06-08 09:47:34,446 [INFO]    # 8 ALL    score=116.0  RSI=61  $221.01  rec=BULLISH           ✗ SKIP
+2026-06-08 09:47:34,446 [INFO]    # 9 WFC    score=113.0  RSI=64  $81.94  rec=BULLISH           ✓ PASS
+2026-06-08 09:47:34,446 [INFO]    #10 BAC    score=113.0  RSI=65  $53.83  rec=BULLISH           ✓ PASS
+2026-06-08 09:47:34,446 [INFO] 📝 Generating Research Report with LLM...
+2026-06-08 09:47:34,446 [INFO] 📋 Research Report generated:
+2026-06-08 09:47:34,447 [INFO]    Scanned: 50 stocks
+2026-06-08 09:47:34,447 [INFO]    Selected for deep analysis: BRK-B, MRK, MRVL, MS, WFC
+2026-06-08 09:47:34,447 [INFO]    Market Regime: NEUTRAL
+2026-06-08 09:47:34,447 [INFO]    → Top 5 selected: ['BRK-B', 'MRK', 'MRVL', 'MS', 'WFC']
+2026-06-08 09:47:34,447 [INFO] 🔍 Step 3: Deep analyzing 5 stocks with 6 AI agents + learning...
+2026-06-08 09:47:34,447 [INFO]    [1/5] Analyzing BRK-B...
+2026-06-08 09:47:35,058 [INFO] Decision #1 recorded: HOLD 0 BRK-B @ $488.13
+2026-06-08 09:47:35,060 [INFO]    [2/5] Analyzing MRK...
+2026-06-08 09:47:35,591 [INFO] Decision #2 recorded: HOLD 0 MRK @ $120.79
+2026-06-08 09:47:35,593 [INFO]    [3/5] Analyzing MRVL...
+2026-06-08 09:47:36,243 [INFO] Decision #3 recorded: HOLD 0 MRVL @ $263.47
+2026-06-08 09:47:36,245 [INFO]    [4/5] Analyzing MS...
+2026-06-08 09:47:36,860 [INFO] Decision #4 recorded: HOLD 0 MS @ $211.93
+2026-06-08 09:47:36,863 [INFO]    [5/5] Analyzing WFC...
+2026-06-08 09:47:37,435 [INFO] Decision #5 recorded: HOLD 0 WFC @ $81.94
+2026-06-08 09:47:37,438 [INFO] 📝 Step 4: Generating your hourly investment report...
+2026-06-08 09:47:37,440 [INFO] 📄 Report saved: report_latest.html + report_latest.txt (and archived)
+2026-06-08 09:47:37,441 [INFO] 📊 Tracker saved: 5 decisions for 09:47
+2026-06-08 09:47:37,441 [INFO] 📚 Step 5: Running adaptive learning cycle...
+2026-06-08 09:47:37,443 [INFO] Reviewed 5 recent decisions
+2026-06-08 09:47:37,508 [INFO] Learning session complete: Reviewed 5 decisions (5/5 correct).
+  market_analyst: 5/5 (100%)
+  news_analyst: 5/5 (100%)
+  quant_analyst: 5/5 (100%)
+  risk_manager: 5/5 (100%)
+
+2026-06-08 09:47:37,509 [INFO] Learning session complete: Reviewed 5 decisions (5/5 correct).
+  market_analyst: 5/5 (100%)
+  news_analyst: 5/5 (100%)
+  quant_analyst: 5/5 (100%)
+  risk_manager: 5/5 (100%)
+
+2026-06-08 09:47:37,509 [INFO]    → Agent weights and parameters adjusted
+2026-06-08 09:47:37,509 [INFO] ✅ Hourly report #1 generated in 45s
+2026-06-08 09:47:37,509 [INFO] 📧 No REPORT_EMAIL set. Report saved locally only.
+2026-06-08 09:47:53,718 [WARNING] ⚠️  No API key — will use rules-only mode (no deep AI analysis)
+2026-06-08 09:47:53,719 [INFO] Decision journal initialized at decision_journal.db
+2026-06-08 09:47:53,719 [INFO] 📊 Loaded tracker: 0 past hours
+2026-06-08 09:47:53,719 [INFO] 🏦 AI Investment HOURLY Report System ready!
+2026-06-08 09:47:53,719 [INFO]    Model: gpt-4o
+2026-06-08 09:47:53,719 [INFO]    Mode: Hourly reports during market hours
+2026-06-08 09:47:53,720 [INFO] 
+🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞
+2026-06-08 09:47:53,720 [INFO] 🏦 HOURLY REPORT — Cycle #1 — 2026-06-08 09:47
+2026-06-08 09:47:53,720 [INFO] 🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞
+2026-06-08 09:47:53,720 [INFO] 📊 Step 0: Reviewing previous hour's decisions...
+2026-06-08 09:47:53,720 [INFO] 🌍 Step 1: Discovering stocks from the market...
+2026-06-08 09:47:53,720 [INFO] 🌍 Stock Discovery Engine — Scanning the entire US market...
+2026-06-08 09:47:53,720 [INFO]   📊 Strategy 1: Fetching S&P 500 + Nasdaq 100 constituents...
+2026-06-08 09:47:53,835 [WARNING] Wikipedia S&P 500 unavailable (HTTP Error 403: Forbidden), using built-in list of 110 stocks
+2026-06-08 09:47:53,897 [WARNING] Wikipedia Nasdaq 100 unavailable (HTTP Error 403: Forbidden), using built-in list
+2026-06-08 09:47:53,898 [INFO]      → 115 unique index stocks
+2026-06-08 09:47:53,898 [INFO]   🚀 Strategy 2: Scanning today's top gainers...
+2026-06-08 09:47:54,028 [INFO] Top gainers: found 30 stocks
+2026-06-08 09:47:54,029 [INFO]      → 30 top gainers
+2026-06-08 09:47:54,030 [INFO]   📉 Strategy 3: Scanning today's top losers (oversold opportunities)...
+2026-06-08 09:47:54,129 [INFO] Top losers: found 15 stocks
+2026-06-08 09:47:54,131 [INFO]      → 15 oversold candidates
+2026-06-08 09:47:54,131 [INFO]   🏭 Strategy 4: Scanning sector leaders...
+2026-06-08 09:47:55,078 [INFO] Sector performers: found 0 stocks across 11 sectors
+2026-06-08 09:47:55,078 [INFO]      → 0 sector leaders
+2026-06-08 09:47:55,078 [INFO]   📦 Strategy 5: Scanning for unusual volume...
+2026-06-08 09:47:57,271 [ERROR] $MMC: possibly delisted; no price data found  (period=1mo) (Yahoo error = "No data found, symbol may be delisted")
+2026-06-08 09:47:58,778 [INFO] Unusual volume: found 2 stocks out of 50 scanned
+2026-06-08 09:47:58,778 [INFO]      → 2 with unusual volume
+2026-06-08 09:47:58,778 [INFO]   💥 Strategy 6: Scanning for technical breakouts...
+2026-06-08 09:47:59,058 [ERROR] $MMC: possibly delisted; no price data found  (period=6mo) (Yahoo error = "No data found, symbol may be delisted")
+2026-06-08 09:48:01,226 [INFO] Breakout scanner: found 5 breakouts
+2026-06-08 09:48:01,226 [INFO]      → 5 breakout stocks
+2026-06-08 09:48:01,226 [INFO] 
+============================================================
+2026-06-08 09:48:01,226 [INFO] 🌍 DISCOVERY COMPLETE
+2026-06-08 09:48:01,227 [INFO]    Total unique stocks discovered: 156
+2026-06-08 09:48:01,227 [INFO]    Top 10 by discovery score:
+2026-06-08 09:48:01,227 [INFO]      MRVL    score=4.0  methods=[index_constituent, top_loser, unusual_volume]
+2026-06-08 09:48:01,227 [INFO]      AVGO    score=3.0  methods=[index_constituent, unusual_volume]
+2026-06-08 09:48:01,227 [INFO]      PLD     score=3.0  methods=[index_constituent, breakout]
+2026-06-08 09:48:01,227 [INFO]      PG      score=3.0  methods=[index_constituent, top_gainer]
+2026-06-08 09:48:01,227 [INFO]      PGR     score=3.0  methods=[index_constituent, top_gainer]
+2026-06-08 09:48:01,227 [INFO]      D       score=3.0  methods=[index_constituent, breakout]
+2026-06-08 09:48:01,227 [INFO]      CL      score=3.0  methods=[index_constituent, top_gainer]
+2026-06-08 09:48:01,227 [INFO]      MRK     score=3.0  methods=[index_constituent, breakout]
+2026-06-08 09:48:01,228 [INFO]      TJX     score=3.0  methods=[index_constituent, breakout]
+2026-06-08 09:48:01,228 [INFO]      MDLZ    score=3.0  methods=[index_constituent, breakout]
+2026-06-08 09:48:01,228 [INFO] ============================================================
+2026-06-08 09:48:01,228 [INFO]    → Found 156 stocks
+2026-06-08 09:48:01,228 [INFO] 🔬 Step 2: Screening 156 stocks → Top 50...
+2026-06-08 09:48:01,228 [INFO] 🔬 Stock Screener scanning 156 discovered stocks...
+2026-06-08 09:48:07,148 [ERROR] $MMC: possibly delisted; no price data found  (period=6mo) (Yahoo error = "No data found, symbol may be delisted")
+2026-06-08 09:48:07,149 [WARNING] No data returned for MMC
+2026-06-08 09:48:19,094 [ERROR] $SQ: possibly delisted; no price data found  (period=6mo) (Yahoo error = "No data found, symbol may be delisted")
+2026-06-08 09:48:19,095 [WARNING] No data returned for SQ
+2026-06-08 09:48:25,526 [INFO]    Scored and ranked → Top 50 stocks:
+2026-06-08 09:48:25,526 [INFO]    # 1 MRK    score=139.0  RSI=60  $120.79  rec=BULLISH           ✓ PASS
+2026-06-08 09:48:25,526 [INFO]    # 2 ABM    score=136.0  RSI=68  $42.54  rec=BULLISH           ✗ SKIP
+2026-06-08 09:48:25,526 [INFO]    # 3 SPG    score=129.0  RSI=64  $210.31  rec=BULLISH           ✗ SKIP
+2026-06-08 09:48:25,526 [INFO]    # 4 MS     score=129.0  RSI=65  $211.93  rec=BULLISH           ✓ PASS
+2026-06-08 09:48:25,526 [INFO]    # 5 MRVL   score=126.0  RSI=65  $263.47  rec=BULLISH           ✓ PASS
+2026-06-08 09:48:25,526 [INFO]    # 6 ARGX   score=126.0  RSI=68  $891.32  rec=BULLISH           ✗ SKIP
+2026-06-08 09:48:25,526 [INFO]    # 7 BRK-B  score=123.0  RSI=60  $488.13  rec=BULLISH           ✓ PASS
+2026-06-08 09:48:25,527 [INFO]    # 8 TJX    score=119.0  RSI=61  $160.71  rec=BULLISH           ✓ PASS
+2026-06-08 09:48:25,527 [INFO]    # 9 ALL    score=116.0  RSI=61  $221.01  rec=BULLISH           ✗ SKIP
+2026-06-08 09:48:25,527 [INFO]    #10 PLD    score=115.0  RSI=55  $144.54  rec=BULLISH           ✓ PASS
+2026-06-08 09:48:25,527 [INFO] 📝 Generating Research Report with LLM...
+2026-06-08 09:48:25,528 [INFO] 📋 Research Report generated:
+2026-06-08 09:48:25,528 [INFO]    Scanned: 50 stocks
+2026-06-08 09:48:25,528 [INFO]    Selected for deep analysis: BRK-B, MRK, MRVL, MS, TJX
+2026-06-08 09:48:25,528 [INFO]    Market Regime: NEUTRAL
+2026-06-08 09:48:25,528 [INFO]    → Top 5 selected: ['BRK-B', 'MRK', 'MRVL', 'MS', 'TJX']
+2026-06-08 09:48:25,528 [INFO] 🔍 Step 3: Deep analyzing 5 stocks with 6 AI agents + learning...
+2026-06-08 09:48:25,528 [INFO]    [1/5] Analyzing BRK-B...
+2026-06-08 09:48:25,791 [INFO] Decision #6 recorded: HOLD 0 BRK-B @ $488.13
+2026-06-08 09:48:25,794 [INFO]    [2/5] Analyzing MRK...
+2026-06-08 09:48:26,003 [INFO] Decision #7 recorded: HOLD 0 MRK @ $120.79
+2026-06-08 09:48:26,006 [INFO]    [3/5] Analyzing MRVL...
+2026-06-08 09:48:26,203 [INFO] Decision #8 recorded: HOLD 0 MRVL @ $263.47
+2026-06-08 09:48:26,205 [INFO]    [4/5] Analyzing MS...
+2026-06-08 09:48:26,406 [INFO] Decision #9 recorded: HOLD 0 MS @ $211.93
+2026-06-08 09:48:26,408 [INFO]    [5/5] Analyzing TJX...
+2026-06-08 09:48:26,969 [INFO] Decision #10 recorded: HOLD 0 TJX @ $160.71
+2026-06-08 09:48:26,971 [INFO] 📝 Step 4: Generating your hourly investment report...
+2026-06-08 09:48:26,974 [INFO] 📄 Report saved: report_latest.html + report_latest.txt (and archived)
+2026-06-08 09:48:26,975 [INFO] 📊 Tracker saved: 5 decisions for 09:48
+2026-06-08 09:48:26,975 [INFO] 📚 Step 5: Running adaptive learning cycle...
+2026-06-08 09:48:26,979 [INFO] Reviewed 10 recent decisions
+2026-06-08 09:48:27,120 [INFO] Learning session complete: Reviewed 10 decisions (10/10 correct).
+  market_analyst: 10/10 (100%)
+  news_analyst: 10/10 (100%)
+  quant_analyst: 10/10 (100%)
+  risk_manager: 10/10 (100%)
+
+2026-06-08 09:48:27,121 [INFO] Learning session complete: Reviewed 10 decisions (10/10 correct).
+  market_analyst: 10/10 (100%)
+  news_analyst: 10/10 (100%)
+  quant_analyst: 10/10 (100%)
+  risk_manager: 10/10 (100%)
+
+2026-06-08 09:48:27,121 [INFO]    → Agent weights and parameters adjusted
+2026-06-08 09:48:27,121 [INFO] ✅ Hourly report #1 generated in 33s
+2026-06-08 09:48:27,121 [INFO] 📧 No REPORT_EMAIL set. Report saved locally only.
+2026-06-08 09:49:22,699 [WARNING] ⚠️  No API key — will use rules-only mode (no deep AI analysis)
+2026-06-08 09:49:22,700 [INFO] Decision journal initialized at decision_journal.db
+2026-06-08 09:49:22,700 [INFO] 📊 Loaded tracker: 1 past hours
+2026-06-08 09:49:22,701 [INFO] 🏦 AI Investment HOURLY Report System ready!
+2026-06-08 09:49:22,701 [INFO]    Model: gpt-4o
+2026-06-08 09:49:22,701 [INFO]    Mode: Hourly reports during market hours
+2026-06-08 09:49:22,701 [INFO] 📊 Step 0: Reviewing previous hour's decisions...
+2026-06-08 09:49:23,244 [INFO] 📊 Previous hour review: 5/5 correct (100%)
+2026-06-08 09:49:23,309 [INFO] 📊 Previous hour review: 5/5 correct (100%)
+2026-06-08 09:49:23,340 [INFO]    → Previous hour: 5/5 correct (100%)
+2026-06-08 09:49:23,340 [INFO]    → Trend: insufficient_data
+2026-06-08 10:00:21,222 [WARNING] ⚠️  No API key — will use rules-only mode (no deep AI analysis)
+2026-06-08 10:00:21,223 [INFO] Decision journal initialized at decision_journal.db
+2026-06-08 10:00:21,223 [INFO] 📊 Loaded tracker: 1 past hours
+2026-06-08 10:00:21,223 [INFO] 🏦 AI Investment HOURLY Report System ready!
+2026-06-08 10:00:21,223 [INFO]    Model: gpt-4o
+2026-06-08 10:00:21,223 [INFO]    Mode: Hourly reports during market hours
+2026-06-08 10:00:21,223 [INFO] 
+🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞
+2026-06-08 10:00:21,223 [INFO] 🏦 HOURLY REPORT — Cycle #1 — 2026-06-08 10:00
+2026-06-08 10:00:21,224 [INFO] 🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞
+2026-06-08 10:00:21,224 [INFO] 📊 Step 0: Reviewing previous hour's decisions...
+2026-06-08 10:00:21,819 [INFO] 📊 Previous hour review: 5/5 correct (100%)
+2026-06-08 10:00:21,887 [INFO] 📊 Previous hour review: 5/5 correct (100%)
+2026-06-08 10:00:21,931 [INFO]    → Previous hour: 5/5 correct (100%)
+2026-06-08 10:00:21,931 [INFO]    → Trend: insufficient_data
+2026-06-08 10:00:21,931 [INFO] 🌍 Step 1: Discovering stocks from the market...
+2026-06-08 10:00:21,931 [INFO] 🌍 Stock Discovery Engine — Scanning the entire US market...
+2026-06-08 10:00:21,931 [INFO]   📊 Strategy 1: Fetching S&P 500 + Nasdaq 100 constituents...
+2026-06-08 10:00:22,077 [WARNING] Wikipedia S&P 500 unavailable (HTTP Error 403: Forbidden), using built-in list of 110 stocks
+2026-06-08 10:00:22,159 [WARNING] Wikipedia Nasdaq 100 unavailable (HTTP Error 403: Forbidden), using built-in list
+2026-06-08 10:00:22,159 [INFO]      → 115 unique index stocks
+2026-06-08 10:00:22,159 [INFO]   🚀 Strategy 2: Scanning today's top gainers...
+2026-06-08 10:00:22,295 [INFO] Top gainers: found 30 stocks
+2026-06-08 10:00:22,297 [INFO]      → 30 top gainers
+2026-06-08 10:00:22,297 [INFO]   📉 Strategy 3: Scanning today's top losers (oversold opportunities)...
+2026-06-08 10:00:22,399 [INFO] Top losers: found 15 stocks
+2026-06-08 10:00:22,401 [INFO]      → 15 oversold candidates
+2026-06-08 10:00:22,401 [INFO]   🏭 Strategy 4: Scanning sector leaders...
+2026-06-08 10:00:23,296 [INFO] Sector performers: found 0 stocks across 11 sectors
+2026-06-08 10:00:23,296 [INFO]      → 0 sector leaders
+2026-06-08 10:00:23,296 [INFO]   📦 Strategy 5: Scanning for unusual volume...
+2026-06-08 10:00:24,755 [ERROR] $MMC: possibly delisted; no price data found  (period=1mo) (Yahoo error = "No data found, symbol may be delisted")
+2026-06-08 10:00:27,373 [ERROR] $SQ: possibly delisted; no price data found  (period=1mo) (Yahoo error = "No data found, symbol may be delisted")
+2026-06-08 10:00:27,410 [INFO] Unusual volume: found 6 stocks out of 50 scanned
+2026-06-08 10:00:27,411 [INFO]      → 6 with unusual volume
+2026-06-08 10:00:27,411 [INFO]   💥 Strategy 6: Scanning for technical breakouts...
+2026-06-08 10:00:27,867 [ERROR] $MMC: possibly delisted; no price data found  (period=6mo) (Yahoo error = "No data found, symbol may be delisted")
+2026-06-08 10:00:29,375 [INFO] Breakout scanner: found 6 breakouts
+2026-06-08 10:00:29,375 [INFO]      → 6 breakout stocks
+2026-06-08 10:00:29,375 [INFO] 
+============================================================
+2026-06-08 10:00:29,375 [INFO] 🌍 DISCOVERY COMPLETE
+2026-06-08 10:00:29,375 [INFO]    Total unique stocks discovered: 156
+2026-06-08 10:00:29,375 [INFO]    Top 10 by discovery score:
+2026-06-08 10:00:29,376 [INFO]      MRVL    score=4.0  methods=[index_constituent, top_loser, unusual_volume]
+2026-06-08 10:00:29,376 [INFO]      AAPL    score=3.0  methods=[index_constituent, breakout]
+2026-06-08 10:00:29,376 [INFO]      META    score=3.0  methods=[index_constituent, unusual_volume]
+2026-06-08 10:00:29,376 [INFO]      MSTR    score=3.0  methods=[index_constituent, unusual_volume]
+2026-06-08 10:00:29,376 [INFO]      GILD    score=3.0  methods=[index_constituent, unusual_volume]
+2026-06-08 10:00:29,376 [INFO]      SPG     score=3.0  methods=[index_constituent, breakout]
+2026-06-08 10:00:29,376 [INFO]      CL      score=3.0  methods=[index_constituent, top_gainer]
+2026-06-08 10:00:29,376 [INFO]      AVGO    score=3.0  methods=[index_constituent, unusual_volume]
+2026-06-08 10:00:29,376 [INFO]      CCI     score=3.0  methods=[index_constituent, breakout]
+2026-06-08 10:00:29,376 [INFO]      EQIX    score=3.0  methods=[index_constituent, breakout]
+2026-06-08 10:00:29,376 [INFO] ============================================================
+2026-06-08 10:00:29,377 [INFO]    → Found 156 stocks
+2026-06-08 10:00:29,377 [INFO] 🔬 Step 2: Screening 156 stocks → Top 50...
+2026-06-08 10:00:29,377 [INFO] 🔬 Stock Screener scanning 156 discovered stocks...
+2026-06-08 10:00:38,178 [ERROR] $SQ: possibly delisted; no price data found  (period=6mo) (Yahoo error = "No data found, symbol may be delisted")
+2026-06-08 10:00:38,178 [WARNING] No data returned for SQ
+2026-06-08 10:00:38,666 [ERROR] $MMC: possibly delisted; no price data found  (period=6mo) (Yahoo error = "No data found, symbol may be delisted")
+2026-06-08 10:00:38,666 [WARNING] No data returned for MMC
+2026-06-08 10:00:54,155 [INFO]    Scored and ranked → Top 50 stocks:
+2026-06-08 10:00:54,155 [INFO]    # 1 MRK    score=139.0  RSI=60  $120.79  rec=BULLISH           ✓ PASS
+2026-06-08 10:00:54,155 [INFO]    # 2 ABM    score=136.0  RSI=68  $42.54  rec=BULLISH           ✗ SKIP
+2026-06-08 10:00:54,156 [INFO]    # 3 SPG    score=135.0  RSI=64  $210.31  rec=BULLISH           ✗ SKIP
+2026-06-08 10:00:54,156 [INFO]    # 4 MS     score=135.0  RSI=65  $211.93  rec=BULLISH           ✓ PASS
+2026-06-08 10:00:54,156 [INFO]    # 5 MRVL   score=126.0  RSI=65  $263.47  rec=BULLISH           ✓ PASS
+2026-06-08 10:00:54,156 [INFO]    # 6 ARGX   score=126.0  RSI=68  $891.32  rec=BULLISH           ✗ SKIP
+2026-06-08 10:00:54,156 [INFO]    # 7 BRK-B  score=123.0  RSI=60  $488.13  rec=BULLISH           ✓ PASS
+2026-06-08 10:00:54,156 [INFO]    # 8 ALL    score=116.0  RSI=61  $221.01  rec=BULLISH           ✗ SKIP
+2026-06-08 10:00:54,156 [INFO]    # 9 WFC    score=113.0  RSI=64  $81.94  rec=BULLISH           ✓ PASS
+2026-06-08 10:00:54,156 [INFO]    #10 BAC    score=113.0  RSI=65  $53.83  rec=BULLISH           ✓ PASS
+2026-06-08 10:00:54,156 [INFO] 📝 Generating Research Report with LLM...
+2026-06-08 10:00:54,157 [INFO] 📋 Research Report generated:
+2026-06-08 10:00:54,157 [INFO]    Scanned: 50 stocks
+2026-06-08 10:00:54,157 [INFO]    Selected for deep analysis: BRK-B, MRK, MRVL, MS, WFC
+2026-06-08 10:00:54,157 [INFO]    Market Regime: NEUTRAL
+2026-06-08 10:00:54,157 [INFO]    → Top 5 selected: ['BRK-B', 'MRK', 'MRVL', 'MS', 'WFC']
+2026-06-08 10:00:54,157 [INFO] 🔍 Step 3: Deep analyzing 5 stocks with 6 AI agents + learning...
+2026-06-08 10:00:54,157 [INFO]    [1/5] Analyzing BRK-B...
+2026-06-08 10:00:54,751 [INFO] Decision #11 recorded: HOLD 0 BRK-B @ $488.13
+2026-06-08 10:00:54,753 [INFO]    [2/5] Analyzing MRK...
+2026-06-08 10:00:55,265 [INFO] Decision #12 recorded: HOLD 0 MRK @ $120.79
+2026-06-08 10:00:55,267 [INFO]    [3/5] Analyzing MRVL...
+2026-06-08 10:00:55,959 [INFO] Decision #13 recorded: HOLD 0 MRVL @ $263.47
+2026-06-08 10:00:55,962 [INFO]    [4/5] Analyzing MS...
+2026-06-08 10:00:56,535 [INFO] Decision #14 recorded: HOLD 0 MS @ $211.93
+2026-06-08 10:00:56,537 [INFO]    [5/5] Analyzing WFC...
+2026-06-08 10:00:57,052 [INFO] Decision #15 recorded: HOLD 0 WFC @ $81.94
+2026-06-08 10:00:57,054 [INFO] 📝 Step 4: Generating your hourly investment report...
+2026-06-08 10:00:57,057 [INFO] 📄 Report saved: report_latest.html + report_latest.txt (and archived)
+2026-06-08 10:00:57,058 [INFO] 📊 Tracker saved: 5 decisions for 10:00
+2026-06-08 10:00:57,058 [INFO] 📚 Step 5: Running adaptive learning cycle...
+2026-06-08 10:00:57,062 [INFO] Reviewed 15 recent decisions
+2026-06-08 10:00:57,273 [INFO] Learning session complete: Reviewed 15 decisions (15/15 correct).
+  market_analyst: 15/15 (100%)
+  news_analyst: 15/15 (100%)
+  quant_analyst: 15/15 (100%)
+  risk_manager: 15/15 (100%)
+
+2026-06-08 10:00:57,273 [INFO] Learning session complete: Reviewed 15 decisions (15/15 correct).
+  market_analyst: 15/15 (100%)
+  news_analyst: 15/15 (100%)
+  quant_analyst: 15/15 (100%)
+  risk_manager: 15/15 (100%)
+
+2026-06-08 10:00:57,273 [INFO]    → Agent weights and parameters adjusted
+2026-06-08 10:00:57,273 [INFO] ✅ Hourly report #1 generated in 36s
+2026-06-08 10:00:57,274 [INFO] 📱 Telegram not configured. Set TELEGRAM_BOT_TOKEN + TELEGRAM_CHAT_ID in .env
+2026-06-08 10:00:57,274 [INFO] 📱 Telegram not configured. Report saved locally only.
+2026-06-09 01:11:00,847 [WARNING] ⚠️  No API key — will use rules-only mode (no deep AI analysis)
+2026-06-09 01:11:00,848 [INFO] Decision journal initialized at decision_journal.db
+2026-06-09 01:11:00,848 [INFO] 📊 Loaded tracker: 2 past hours
+2026-06-09 01:11:00,848 [INFO] 🏦 AI Investment HOURLY Report System ready!
+2026-06-09 01:11:00,848 [INFO]    Model: gpt-4o
+2026-06-09 01:11:00,848 [INFO]    ET Time now: 2026-06-08 21:11 Monday
+2026-06-09 01:11:00,849 [INFO]    Market CLOSED
+2026-06-09 01:11:22,932 [WARNING] ⚠️  No API key — will use rules-only mode (no deep AI analysis)
+2026-06-09 01:11:22,933 [INFO] Decision journal initialized at decision_journal.db
+2026-06-09 01:11:22,933 [INFO] 📊 Loaded tracker: 2 past hours
+2026-06-09 01:11:22,933 [INFO] 🏦 AI Investment HOURLY Report System ready!
+2026-06-09 01:11:22,933 [INFO]    Model: gpt-4o
+2026-06-09 01:11:22,934 [INFO]    ET Time now: 2026-06-08 21:11 Monday
+2026-06-09 01:11:22,934 [INFO]    Market CLOSED
+2026-06-09 01:11:22,934 [INFO] 
+🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞
+2026-06-09 01:11:22,934 [INFO] 🏦 HOURLY REPORT — Cycle #1 — 2026-06-09 01:11
+2026-06-09 01:11:22,934 [INFO] 🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞🦞
+2026-06-09 01:11:22,934 [INFO] 📊 Step 0: Reviewing previous hour's decisions...
+2026-06-09 01:11:24,527 [INFO] 📊 Previous hour review: 4/5 correct (80%)
+2026-06-09 01:11:24,889 [INFO] 📊 Previous hour review: 4/5 correct (80%)
+2026-06-09 01:11:24,933 [INFO]    → Previous hour: 4/5 correct (80%)
+2026-06-09 01:11:24,933 [INFO]    → Trend: stable
+2026-06-09 01:11:24,933 [INFO] 🌍 Step 1: Discovering stocks from the market...
+2026-06-09 01:11:24,933 [INFO] 🌍 Stock Discovery Engine — Scanning the entire US market...
+2026-06-09 01:11:24,933 [INFO]   📊 Strategy 1: Fetching S&P 500 + Nasdaq 100 constituents...
+2026-06-09 01:11:25,029 [WARNING] Wikipedia S&P 500 unavailable (HTTP Error 403: Forbidden), using built-in list of 110 stocks
+2026-06-09 01:11:25,092 [WARNING] Wikipedia Nasdaq 100 unavailable (HTTP Error 403: Forbidden), using built-in list
+2026-06-09 01:11:25,092 [INFO]      → 115 unique index stocks
+2026-06-09 01:11:25,092 [INFO]   🚀 Strategy 2: Scanning today's top gainers...
+2026-06-09 01:11:25,219 [INFO] Top gainers: found 30 stocks
+2026-06-09 01:11:25,220 [INFO]      → 30 top gainers
+2026-06-09 01:11:25,220 [INFO]   📉 Strategy 3: Scanning today's top losers (oversold opportunities)...
+2026-06-09 01:11:25,441 [INFO] Top losers: found 15 stocks
+2026-06-09 01:11:25,442 [INFO]      → 15 oversold candidates
+2026-06-09 01:11:25,442 [INFO]   🏭 Strategy 4: Scanning sector leaders...
+2026-06-09 01:11:26,310 [INFO] Sector performers: found 0 stocks across 11 sectors
+2026-06-09 01:11:26,310 [INFO]      → 0 sector leaders
+2026-06-09 01:11:26,310 [INFO]   📦 Strategy 5: Scanning for unusual volume...
+2026-06-09 01:11:30,483 [ERROR] $MMC: possibly delisted; no price data found  (period=1mo) (Yahoo error = "No data found, symbol may be delisted")
+2026-06-09 01:11:33,132 [INFO] Unusual volume: found 1 stocks out of 50 scanned
+2026-06-09 01:11:33,133 [INFO]      → 1 with unusual volume
+2026-06-09 01:11:33,133 [INFO]   💥 Strategy 6: Scanning for technical breakouts...
+2026-06-09 01:11:36,691 [INFO] Breakout scanner: found 5 breakouts
+2026-06-09 01:11:36,692 [INFO]      → 5 breakout stocks
+2026-06-09 01:11:36,692 [INFO] 
+============================================================
+2026-06-09 01:11:36,692 [INFO] 🌍 DISCOVERY COMPLETE
+2026-06-09 01:11:36,692 [INFO]    Total unique stocks discovered: 158
+2026-06-09 01:11:36,692 [INFO]    Top 10 by discovery score:
+2026-06-09 01:11:36,692 [INFO]      MRVL    score=5.0  methods=[index_constituent, top_gainer, unusual_volume]
+2026-06-09 01:11:36,692 [INFO]      KO      score=3.0  methods=[index_constituent, breakout]
+2026-06-09 01:11:36,692 [INFO]      INTC    score=3.0  methods=[index_constituent, top_gainer]
+2026-06-09 01:11:36,692 [INFO]      UNH     score=3.0  methods=[index_constituent, breakout]
+2026-06-09 01:11:36,692 [INFO]      MNST    score=3.0  methods=[index_constituent, breakout]
+2026-06-09 01:11:36,692 [INFO]      LLY     score=3.0  methods=[index_constituent, breakout]
+2026-06-09 01:11:36,692 [INFO]      MRK     score=3.0  methods=[index_constituent, breakout]
+2026-06-09 01:11:36,692 [INFO]      TNGX    score=2.0  methods=[top_gainer]
+2026-06-09 01:11:36,692 [INFO]      GLXY    score=2.0  methods=[top_gainer]
+2026-06-09 01:11:36,692 [INFO]      CBRS    score=2.0  methods=[top_gainer]
+2026-06-09 01:11:36,692 [INFO] ============================================================
+2026-06-09 01:11:36,692 [INFO]    → Found 158 stocks
+2026-06-09 01:11:36,693 [INFO] 🔬 Step 2: Screening 158 stocks → Top 50...
+2026-06-09 01:11:36,693 [INFO] 🔬 Stock Screener scanning 158 discovered stocks...
+2026-06-09 01:11:48,989 [ERROR] $SQ: possibly delisted; no price data found  (period=6mo) (Yahoo error = "No data found, symbol may be delisted")
+2026-06-09 01:11:48,990 [WARNING] No data returned for SQ
+2026-06-09 01:12:01,063 [ERROR] $MMC: possibly delisted; no price data found  (period=6mo) (Yahoo error = "No data found, symbol may be delisted")
+2026-06-09 01:12:01,063 [WARNING] No data returned for MMC
+2026-06-09 01:12:05,300 [INFO]    Scored and ranked → Top 50 stocks:
+2026-06-09 01:12:05,300 [INFO]    # 1 MRVL   score=129.0  RSI=69  $288.85  rec=BULLISH           ✓ PASS
+2026-06-09 01:12:05,300 [INFO]    # 2 SPG    score=129.0  RSI=57  $207.34  rec=BULLISH           ✗ SKIP
+2026-06-09 01:12:05,300 [INFO]    # 3 MS     score=129.0  RSI=65  $212.24  rec=BULLISH           ✓ PASS
+2026-06-09 01:12:05,300 [INFO]    # 4 MRK    score=119.0  RSI=57  $119.52  rec=BULLISH           ✓ PASS
+2026-06-09 01:12:05,300 [INFO]    # 5 KLAC   score=116.0  RSI=62  $2108.06  rec=BULLISH           ✗ SKIP
+2026-06-09 01:12:05,300 [INFO]    # 6 AMAT   score=116.0  RSI=63  $492.17  rec=BULLISH           ✓ PASS
+2026-06-09 01:12:05,300 [INFO]    # 7 ROST   score=113.0  RSI=52  $227.42  rec=BULLISH           ✓ PASS
+2026-06-09 01:12:05,300 [INFO]    # 8 WFC    score=113.0  RSI=60  $80.96  rec=BULLISH           ✓ PASS
+2026-06-09 01:12:05,300 [INFO]    # 9 BAC    score=113.0  RSI=63  $53.63  rec=BULLISH           ✓ PASS
+2026-06-09 01:12:05,300 [INFO]    #10 JPM    score=113.0  RSI=58  $311.11  rec=BULLISH           ✓ PASS
+2026-06-09 01:12:05,300 [INFO] 📝 Generating Research Report with LLM...
+2026-06-09 01:12:05,301 [INFO] 📋 Research Report generated:
+2026-06-09 01:12:05,301 [INFO]    Scanned: 50 stocks
+2026-06-09 01:12:05,301 [INFO]    Selected for deep analysis: AMAT, MRK, MRVL, MS, ROST
+2026-06-09 01:12:05,301 [INFO]    Market Regime: NEUTRAL
+2026-06-09 01:12:05,301 [INFO]    → Top 5 selected: ['AMAT', 'MRK', 'MRVL', 'MS', 'ROST']
+2026-06-09 01:12:05,301 [INFO] 🔍 Step 3: Deep analyzing 5 stocks with 6 AI agents + learning...
+2026-06-09 01:12:05,301 [INFO]    [1/5] Analyzing AMAT...
+2026-06-09 01:12:05,945 [INFO] Decision #16 recorded: HOLD 0 AMAT @ $492.17
+2026-06-09 01:12:05,947 [INFO]    [2/5] Analyzing MRK...
+2026-06-09 01:12:06,520 [INFO] Decision #17 recorded: HOLD 0 MRK @ $119.52
+2026-06-09 01:12:06,522 [INFO]    [3/5] Analyzing MRVL...
+2026-06-09 01:12:07,286 [INFO] Decision #18 recorded: HOLD 0 MRVL @ $288.85
+2026-06-09 01:12:07,287 [INFO]    [4/5] Analyzing MS...
+2026-06-09 01:12:07,886 [INFO] Decision #19 recorded: HOLD 0 MS @ $212.24
+2026-06-09 01:12:07,888 [INFO]    [5/5] Analyzing ROST...
+2026-06-09 01:12:08,586 [INFO] Decision #20 recorded: HOLD 0 ROST @ $227.42
+2026-06-09 01:12:08,588 [INFO] 📝 Step 4: Generating your hourly investment report...
+2026-06-09 01:12:08,590 [INFO] 📄 Report saved: report_latest.html + report_latest.txt (and archived)
+2026-06-09 01:12:08,591 [INFO] 📊 Tracker saved: 5 decisions for 01:12
+2026-06-09 01:12:08,591 [INFO] 📚 Step 5: Running adaptive learning cycle...
+2026-06-09 01:12:08,595 [INFO] Reviewed 20 recent decisions
+2026-06-09 01:12:08,829 [INFO] Learning session complete: Reviewed 20 decisions (20/20 correct).
+  market_analyst: 20/20 (100%)
+  news_analyst: 20/20 (100%)
+  quant_analyst: 20/20 (100%)
+  risk_manager: 20/20 (100%)
+
+2026-06-09 01:12:08,829 [INFO] Learning session complete: Reviewed 20 decisions (20/20 correct).
+  market_analyst: 20/20 (100%)
+  news_analyst: 20/20 (100%)
+  quant_analyst: 20/20 (100%)
+  risk_manager: 20/20 (100%)
+
+2026-06-09 01:12:08,829 [INFO]    → Agent weights and parameters adjusted
+2026-06-09 01:12:08,830 [INFO] ✅ Hourly report #1 generated in 46s
+2026-06-09 01:12:08,834 [INFO] 📱 Telegram not configured. Set TELEGRAM_BOT_TOKEN + TELEGRAM_CHAT_ID in .env
+2026-06-09 01:12:08,834 [INFO] 📱 Telegram not configured. Report saved locally only.

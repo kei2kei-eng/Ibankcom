@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🏦 AI iBank Hourly Report — 2026-06-09 01:12</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0a; color: #e0e0e0; padding: 20px; max-width: 1200px; margin: 0 auto; }
+h1 { color: #ff6b35; font-size: 28px; margin-bottom: 5px; }
+h2 { color: #fff; font-size: 22px; margin: 20px 0 10px; padding-bottom: 8px; border-bottom: 2px solid #333; }
+h3 { color: #aaa; font-size: 16px; margin-bottom: 8px; }
+.subtitle { color: #888; font-size: 14px; margin-bottom: 20px; }
+.cycle-badge { background: #ff6b35; color: #000; padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: bold; }
+.overview { background: #1a1a2e; padding: 20px; border-radius: 10px; margin: 15px 0; line-height: 1.7; }
+.overview p { margin-bottom: 12px; }
+.summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin: 15px 0; }
+.stat-box { background: #1a1a2e; padding: 15px; border-radius: 10px; text-align: center; }
+.stat-box .num { font-size: 32px; font-weight: bold; }
+.stat-box.buy .num { color: #00d4aa; }
+.stat-box.sell .num { color: #ff4757; }
+.stat-box.hold .num { color: #ffa502; }
+.stat-box.accuracy .num { color: #a29bfe; }
+.stat-box.trend .num { font-size: 18px; }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 15px; margin: 15px 0; }
+.card { background: #1a1a2e; border-radius: 10px; overflow: hidden; }
+.card-header { padding: 15px; display: flex; justify-content: space-between; align-items: center; }
+.card.buy .card-header { background: linear-gradient(135deg, #00b894, #00cec9); color: #000; }
+.card.sell .card-header { background: linear-gradient(135deg, #e17055, #d63031); color: #fff; }
+.card-body { padding: 15px; }
+.ticker { font-size: 20px; font-weight: bold; }
+.price { font-size: 18px; }
+.conf { font-size: 14px; opacity: 0.9; }
+.reasoning { color: #ccc; font-size: 14px; line-height: 1.5; margin-top: 8px; }
+table { width: 100%; border-collapse: collapse; margin: 10px 0; }
+th { background: #2d3436; color: #dfe6e9; padding: 10px; text-align: left; font-size: 13px; }
+td { padding: 8px 10px; border-bottom: 1px solid #2d3436; font-size: 13px; }
+tr.buy td { color: #00d4aa; }
+tr.sell td { color: #ff4757; }
+.positive { color: #00d4aa !important; }
+.negative { color: #ff4757 !important; }
+.hold-color { color: #ffa502 !important; }
+.stock-detail { background: #111; border-radius: 10px; padding: 20px; margin: 15px 0; }
+.big-decision { font-size: 36px; font-weight: bold; text-align: center; padding: 10px; }
+.big-decision.buy { color: #00d4aa; }
+.big-decision.sell { color: #ff4757; }
+.big-decision.hold { color: #ffa502; }
+.detail-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; margin-top: 15px; }
+.detail-card { background: #1a1a2e; padding: 15px; border-radius: 8px; }
+.agent-table th, .agent-table td { font-size: 12px; padding: 5px 8px; }
+.disclaimer { background: #2d3436; padding: 15px; border-radius: 8px; color: #636e72; font-size: 12px; margin-top: 30px; text-align: center; }
+.countdown { background: #1a1a2e; padding: 10px 20px; border-radius: 8px; display: inline-block; margin: 10px 0; color: #ffa502; font-size: 14px; }
+</style>
+</head>
+<body>
+
+<h1>🏦 AI Investment Bank — Hourly Report <span class="cycle-badge">#1</span></h1>
+<p class="subtitle">2026-06-09 01:12 | Market Regime: NEUTRAL | 50 stocks scanned | <span class="countdown">⏱ Next report in ~60 min</span></p>
+
+<div class="summary-grid">
+    <div class="stat-box buy"><div class="num">0</div><div>🟢 BUY</div></div>
+    <div class="stat-box sell"><div class="num">0</div><div>🔴 SELL</div></div>
+    <div class="stat-box hold"><div class="num">5</div><div>🟡 HOLD</div></div>
+    <div class="stat-box accuracy"><div class="num">0.8</div><div>📊 Prev Hour Acc</div></div>
+    <div class="stat-box trend"><div class="num" style="color: #ffa502">STABLE</div><div>📈 Trend</div></div>
+</div>
+
+
+            <h2>📊 What Changed Since Last Hour (09:48)</h2>
+            <div class="overview">
+                <p><strong>Accuracy:</strong> <span class="positive">80%</span>
+                (4/5 correct)</p>
+                <p><strong>Learning:</strong> Good hour — agents are reading the market well. Consider maintaining current strategy.</p>
+            </div>
+            <table>
+                <tr><th></th><th>Ticker</th><th>Action</th><th>Prev Price</th><th>Now</th><th>Change</th><th>Conf</th><th>Notes</th></tr>
+                
+                <tr>
+                    <td>✅</td>
+                    <td><strong>BRK-B</strong></td>
+                    <td>HOLD</td>
+                    <td>$488.13</td>
+                    <td>$487.00</td>
+                    <td class="negative">-0.23%</td>
+                    <td>0%</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>✅</td>
+                    <td><strong>MRK</strong></td>
+                    <td>HOLD</td>
+                    <td>$120.79</td>
+                    <td>$119.52</td>
+                    <td class="negative">-1.05%</td>
+                    <td>0%</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>❌</td>
+                    <td><strong>MRVL</strong></td>
+                    <td>HOLD</td>
+                    <td>$263.47</td>
+                    <td>$288.85</td>
+                    <td class="positive">+9.63%</td>
+                    <td>0%</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>✅</td>
+                    <td><strong>MS</strong></td>
+                    <td>HOLD</td>
+                    <td>$211.93</td>
+                    <td>$212.24</td>
+                    <td class="positive">+0.15%</td>
+                    <td>0%</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>✅</td>
+                    <td><strong>TJX</strong></td>
+                    <td>HOLD</td>
+                    <td>$160.71</td>
+                    <td>$159.75</td>
+                    <td class="negative">-0.60%</td>
+                    <td>0%</td>
+                    <td></td>
+                </tr>
+            </table>
+
+            <h2>📈 Multi-Hour Accuracy Trend: <span class="hold-color">STABLE</span></h2>
+            <table>
+                <tr><th>Hour</th><th>Accuracy</th><th>Picks</th></tr>
+                
+                <tr>
+                    <td>09:47</td>
+                    <td class="positive">80%</td>
+                    <td>5 picks</td>
+                </tr>
+                <tr>
+                    <td>09:48</td>
+                    <td class="positive">80%</td>
+                    <td>5 picks</td>
+                </tr>
+            </table>
+            <div class="overview"><p>Accuracy is stable — system is performing consistently.</p></div>
+
+<h2>📰 Hourly Market Update</h2>
+<div class="overview">Market overview unavailable. Run with OpenAI API key for AI-generated analysis.</div>
+
+<h2>🎯 Buy Recommendations — This Hour</h2>
+<div class="cards"><p>No strong buy signals this hour.</p></div>
+
+
+
+<h2>📊 Top 50 Ranked Stocks</h2>
+<table>
+<tr><th>#</th><th>Ticker</th><th>Company</th><th>Price</th><th>Change</th><th>Score</th><th>RSI</th><th>Signal</th></tr>
+
+            <tr class="buy">
+                <td>1</td>
+                <td><strong>MRVL</strong></td>
+                <td>Marvell Technology, </td>
+                <td>$288.85</td>
+                <td class="positive">+9.63%</td>
+                <td>129</td>
+                <td>69</td>
+                <td>BULLISH</td>
+            </tr>
+            <tr class="buy">
+                <td>2</td>
+                <td><strong>SPG</strong></td>
+                <td>Simon Property Group</td>
+                <td>$207.34</td>
+                <td class="negative">-1.41%</td>
+                <td>129</td>
+                <td>57</td>
+                <td>BULLISH</td>
+            </tr>
+            <tr class="buy">
+                <td>3</td>
+                <td><strong>MS</strong></td>
+                <td>Morgan Stanley</td>
+                <td>$212.24</td>
+                <td class="positive">+0.15%</td>
+                <td>129</td>
+                <td>65</td>
+                <td>BULLISH</td>
+            </tr>
+            <tr class="buy">
+                <td>4</td>
+                <td><strong>MRK</strong></td>
+                <td>Merck & Co., Inc.</td>
+                <td>$119.52</td>
+                <td class="negative">-1.05%</td>
+                <td>119</td>
+                <td>57</td>
+                <td>BULLISH</td>
+            </tr>
+            <tr class="buy">
+                <td>5</td>
+                <td><strong>KLAC</strong></td>
+                <td>KLA Corporation</td>
+                <td>$2108.06</td>
+                <td class="positive">+9.27%</td>
+                <td>116</td>
+                <td>62</td>
+                <td>BULLISH</td>
+            </tr>
+            <tr class="buy">
+                <td>6</td>
+                <td><strong>AMAT</strong></td>
+                <td>Applied Materials, I</td>
+                <td>$492.17</td>
+                <td class="positive">+8.64%</td>
+                <td>116</td>
+                <td>63</td>
+                <td>BULLISH</td>
+            </tr>
+            <tr class="buy">
+                <td>7</td>
+                <td><strong>ROST</strong></td>
+                <td>Ross Stores, Inc.</td>
+                <td>$227.42</td>
+                <td class="negative">-1.28%</td>
+                <td>113</td>
+                <td>52</td>
+                <td>BULLISH</td>
+            </tr>
+            <tr class="buy">
+                <td>8</td>
+                <td><strong>WFC</strong></td>
+                <td>Wells Fargo & Compan</td>
+                <td>$80.96</td>
+                <td class="negative">-1.20%</td>
+                <td>113</td>
+                <td>60</td>
+                <td>BULLISH</td>
+            </tr>
+            <tr class="buy">
+                <td>9</td>
+                <td><strong>BAC</strong></td>
+                <td>Bank of America Corp</td>
+                <td>$53.63</td>
+                <td class="negative">-0.37%</td>
+                <td>113</td>
+                <td>63</td>
+                <td>BULLISH</td>
+            </tr>
+            <tr class="buy">
+                <td>10</td>
+                <td><strong>JPM</strong></td>
+                <td>JPMorgan Chase & Co.</td>
+                <td>$311.11</td>
+                <td class="negative">-0.40%</td>
+                <td>113</td>
+                <td>58</td>
+                <td>BULLISH</td>
+            </tr>
+            <tr class="buy">
+                <td>11</td>
+                <td><strong>PSA</strong></td>
+                <td>Public Storage</td>
+                <td>$311.08</td>
+                <td class="positive">+0.45%</td>
+                <td>113</td>
+                <td>59</td>
+                <td>BULLISH</td>
+            </tr>
+            <tr class="buy">
+                <td>12</td>
+                <td><strong>TJX</strong></td>
+                <td>The TJX Companies, I</td>
+                <td>$159.75</td>
+                <td class="negative">-0.60%</td>
+                <td>113</td>
+                <td>59</td>
+                <td>BULLISH</td>
+            </tr>
+            <tr class="buy">
+                <td>13</td>
+                <td><strong>SRAD</strong></td>
+                <td>Sportradar Group AG</td>
+                <td>$15.26</td>
+                <td class="positive">+9.78%</td>
+                <td>110</td>
+                <td>64</td>
+                <td>BULLISH</td>
+            </tr>
+            <tr class="buy">
+                <td>14</td>
+                <td><strong>AAPL</strong></td>
+                <td>Apple Inc.</td>
+                <td>$301.54</td>
+                <td class="negative">-1.89%</td>
+                <td>109</td>
+                <td>53</td>
+                <td>BULLISH</td>
+            </tr>
+            <tr class="buy">
+                <td>15</td>
+                <td><strong>GS</strong></td>
+                <td>The Goldman Sachs Gr</td>
+                <td>$1045.00</td>
+                <td class="positive">+0.61%</td>
+                <td>109</td>
+                <td>62</td>
+                <td>BULLISH</td>
+            </tr>
+            <tr class="buy">
+                <td>16</td>
+                <td><strong>TNGX</strong></td>
+                <td>Tango Therapeutics, </td>
+                <td>$30.93</td>
+                <td class="positive">+52.97%</td>
+                <td>106</td>
+                <td>70</td>
+                <td>BULLISH</td>
+            </tr>
+            <tr class="buy">
+                <td>17</td>
+                <td><strong>BRK-B</strong></td>
+                <td>Berkshire Hathaway I</td>
+                <td>$487.00</td>
+                <td class="negative">-0.23%</td>
+                <td>103</td>
+                <td>59</td>
+                <td>BULLISH</td>
+            </tr>
+            <tr class="buy">
+                <td>18</td>
+                <td><strong>ENSG</strong></td>
+                <td>The Ensign Group, In</td>
+                <td>$156.42</td>
+                <td class="negative">-8.15%</td>
+                <td>103</td>
+                <td>28</td>
+                <td>BULLISH</td>
+            </tr>
+            <tr class="buy">
+                <td>19</td>
+                <td><strong>HCA</strong></td>
+                <td>HCA Healthcare, Inc.</td>
+                <td>$361.32</td>
+                <td class="negative">-2.90%</td>
+                <td>99</td>
+                <td>24</td>
+                <td>BULLISH</td>
+            </tr>
+            <tr class="buy">
+                <td>20</td>
+                <td><strong>ABBV</strong></td>
+                <td>AbbVie Inc.</td>
+                <td>$223.07</td>
+                <td class="negative">-1.83%</td>
+                <td>97</td>
+                <td>62</td>
+                <td>BULLISH</td>
+            </tr>
+            <tr class="buy">
+                <td>21</td>
+                <td><strong>PG</strong></td>
+                <td>The Procter & Gamble</td>
+                <td>$145.10</td>
+                <td class="negative">-0.98%</td>
+                <td>97</td>
+                <td>53</td>
+                <td>BULLISH</td>
+            </tr>
+            <tr class="buy">
+                <td>22</td>
+                <td><strong>CRM</strong></td>
+                <td>Salesforce, Inc.</td>
+                <td>$182.55</td>
+                <td class="negative">-1.68%</td>
+                <td>97</td>
+                <td>49</td>
+                <td>BULLISH</td>
+            </tr>
+            <tr class="buy">
+                <td>23</td>
+                <td><strong>JNJ</strong></td>
+                <td>Johnson & Johnson</td>
+                <td>$232.16</td>
+                <td class="negative">-0.26%</td>
+                <td>97</td>
+                <td>57</td>
+                <td>BULLISH</td>
+            </tr>
+            <tr class="buy">
+                <td>24</td>
+                <td><strong>DELL</strong></td>
+                <td>Dell Technologies In</td>
+                <td>$400.77</td>
+                <td class="positive">+1.62%</td>
+                <td>97</td>
+                <td>69</td>
+                <td>BULLISH</td>
+            </tr>
+            <tr class="buy">
+                <td>25</td>
+                <td><strong>CI</strong></td>
+                <td>The Cigna Group</td>
+                <td>$289.61</td>
+                <td class="positive">+0.04%</td>
+                <td>97</td>
+                <td>57</td>
+                <td>BULLISH</td>
+            </tr>
+            <tr class="buy">
+                <td>26</td>
+                <td><strong>AMT</strong></td>
+                <td>American Tower Corpo</td>
+                <td>$189.10</td>
+                <td class="negative">-2.59%</td>
+                <td>97</td>
+                <td>58</td>
+                <td>BULLISH</td>
+            </tr>
+            <tr class="buy">
+                <td>27</td>
+                <td><strong>CVX</strong></td>
+                <td>Chevron Corporation</td>
+                <td>$189.24</td>
+                <td class="positive">+1.03%</td>
+                <td>97</td>
+                <td>53</td>
+                <td>BULLISH</td>
+            </tr>
+            <tr class="buy">
+                <td>28</td>
+                <td><strong>AMGN</strong></td>
+                <td>Amgen Inc.</td>
+                <td>$345.73</td>
+                <td class="negative">-1.10%</td>
+                <td>97</td>
+                <td>58</td>
+                <td>BULLISH</td>
+            </tr>
+            <tr class="buy">
+                <td>29</td>
+                <td><strong>ORCL</strong></td>
+                <td>Oracle Corporation</td>
+                <td>$211.82</td>
+                <td class="negative">-0.87%</td>
+                <td>97</td>
+                <td>55</td>
+                <td>BULLISH</td>
+            </tr>
+            <tr class="buy">
+                <td>30</td>
+                <td><strong>KO</strong></td>
+                <td>The Coca-Cola Compan</td>
+                <td>$79.54</td>
+                <td class="positive">+0.08%</td>
+                <td>95</td>
+                <td>52</td>
+                <td>BULLISH</td>
+            </tr>
+            <tr class="buy">
+                <td>31</td>
+                <td><strong>REGN</strong></td>
+                <td>Regeneron Pharmaceut</td>
+                <td>$611.34</td>
+                <td class="negative">-3.79%</td>
+                <td>93</td>
+                <td>35</td>
+                <td>BULLISH</td>
+            </tr>
+            <tr class="buy">
+                <td>32</td>
+                <td><strong>AXP</strong></td>
+                <td>American Express Com</td>
+                <td>$312.30</td>
+                <td class="positive">+0.53%</td>
+                <td>93</td>
+                <td>49</td>
+                <td>BULLISH</td>
+            </tr>
+            <tr class="buy">
+                <td>33</td>
+                <td><strong>ZTS</strong></td>
+                <td>Zoetis Inc.</td>
+                <td>$78.82</td>
+                <td class="negative">-0.78%</td>
+                <td>93</td>
+                <td>33</td>
+                <td>BULLISH</td>
+            </tr>
+            <tr class="buy">
+                <td>34</td>
+                <td><strong>UPS</strong></td>
+                <td>United Parcel Servic</td>
+                <td>$107.70</td>
+                <td class="negative">-0.77%</td>
+                <td>93</td>
+                <td>61</td>
+                <td>BULLISH</td>
+            </tr>
+            <tr class="buy">
+                <td>35</td>
+                <td><strong>DUK</strong></td>
+                <td>Duke Energy Corporat</td>
+                <td>$122.05</td>
+                <td class="negative">-1.75%</td>
+                <td>93</td>
+                <td>45</td>
+                <td>BULLISH</td>
+            </tr>
+            <tr class="buy">
+                <td>36</td>
+                <td><strong>ACN</strong></td>
+                <td>Accenture plc</td>
+                <td>$174.43</td>
+                <td class="negative">-2.14%</td>
+                <td>93</td>
+                <td>45</td>
+                <td>BULLISH</td>
+            </tr>
+            <tr class="buy">
+                <td>37</td>
+                <td><strong>CB</strong></td>
+                <td>Chubb Limited</td>
+                <td>$321.88</td>
+                <td class="negative">-1.35%</td>
+                <td>93</td>
+                <td>51</td>
+                <td>BULLISH</td>
+            </tr>
+            <tr class="buy">
+                <td>38</td>
+                <td><strong>PGR</strong></td>
+                <td>The Progressive Corp</td>
+                <td>$200.26</td>
+                <td class="negative">-1.84%</td>
+                <td>93</td>
+                <td>53</td>
+                <td>BULLISH</td>
+            </tr>
+            <tr class="buy">
+                <td>39</td>
+                <td><strong>KB</strong></td>
+                <td>KB Financial Group I</td>
+                <td>$100.39</td>
+                <td class="negative">-6.97%</td>
+                <td>93</td>
+                <td>41</td>
+                <td>BULLISH</td>
+            </tr>
+            <tr class="buy">
+                <td>40</td>
+                <td><strong>IDYA</strong></td>
+                <td>IDEAYA Biosciences, </td>
+                <td>$31.48</td>
+                <td class="positive">+11.28%</td>
+                <td>90</td>
+                <td>61</td>
+                <td>BULLISH</td>
+            </tr>
+            <tr class="buy">
+                <td>41</td>
+                <td><strong>ALAB</strong></td>
+                <td>Astera Labs, Inc.</td>
+                <td>$346.33</td>
+                <td class="positive">+9.23%</td>
+                <td>90</td>
+                <td>65</td>
+                <td>BULLISH</td>
+            </tr>
+            <tr class="buy">
+                <td>42</td>
+                <td><strong>LLY</strong></td>
+                <td>Eli Lilly and Compan</td>
+                <td>$1149.15</td>
+                <td class="positive">+1.57%</td>
+                <td>89</td>
+                <td>71</td>
+                <td>BULLISH</td>
+            </tr>
+            <tr class="buy">
+                <td>43</td>
+                <td><strong>PLD</strong></td>
+                <td>Prologis, Inc.</td>
+                <td>$142.78</td>
+                <td class="negative">-1.22%</td>
+                <td>89</td>
+                <td>51</td>
+                <td>BULLISH</td>
+            </tr>
+            <tr class="buy">
+                <td>44</td>
+                <td><strong>CAT</strong></td>
+                <td>Caterpillar Inc.</td>
+                <td>$915.64</td>
+                <td class="positive">+1.26%</td>
+                <td>89</td>
+                <td>57</td>
+                <td>BULLISH</td>
+            </tr>
+            <tr class="buy">
+                <td>45</td>
+                <td><strong>CSCO</strong></td>
+                <td>Cisco Systems, Inc.</td>
+                <td>$124.15</td>
+                <td class="positive">+2.06%</td>
+                <td>89</td>
+                <td>65</td>
+                <td>BULLISH</td>
+            </tr>
+            <tr class="buy">
+                <td>46</td>
+                <td><strong>HOOD</strong></td>
+                <td>Robinhood Markets, I</td>
+                <td>$85.04</td>
+                <td class="positive">+3.12%</td>
+                <td>87</td>
+                <td>54</td>
+                <td>BULLISH</td>
+            </tr>
+            <tr class="buy">
+                <td>47</td>
+                <td><strong>ANET</strong></td>
+                <td>Arista Networks, Inc</td>
+                <td>$156.40</td>
+                <td class="positive">+1.38%</td>
+                <td>87</td>
+                <td>50</td>
+                <td>BULLISH</td>
+            </tr>
+            <tr class="buy">
+                <td>48</td>
+                <td><strong>VRTX</strong></td>
+                <td>Vertex Pharmaceutica</td>
+                <td>$442.96</td>
+                <td class="negative">-0.87%</td>
+                <td>87</td>
+                <td>53</td>
+                <td>BULLISH</td>
+            </tr>
+            <tr class="buy">
+                <td>49</td>
+                <td><strong>SNOW</strong></td>
+                <td>Snowflake Inc.</td>
+                <td>$240.45</td>
+                <td class="positive">+0.92%</td>
+                <td>87</td>
+                <td>66</td>
+                <td>BULLISH</td>
+            </tr>
+            <tr class="buy">
+                <td>50</td>
+                <td><strong>DUOL</strong></td>
+                <td>Duolingo, Inc.</td>
+                <td>$117.96</td>
+                <td class="positive">+8.19%</td>
+                <td>86</td>
+                <td>61</td>
+                <td>BULLISH</td>
+            </tr>
+</table>
+
+<h2>🔍 Deep Analysis — Top Picks This Hour</h2>
+
+            <div class="stock-detail">
+                <h2 class="hold">🎯 Applied Materials, Inc. (AMAT) — HOLD</h2>
+                <div class="detail-grid">
+                    <div class="detail-card">
+                        <h3>CEO Decision</h3>
+                        <p class="big-decision hold">HOLD</p>
+                        <p>Confidence: 0% | Risk: HIGH | Consensus: N/A</p>
+                        
+                        <p class="reasoning"><strong>Why:</strong> LLM unavailable - defaulting to HOLD for safety</p>
+                    </div>
+                    <div class="detail-card">
+                        <h3>Agent Votes</h3>
+                        <table class="agent-table"><tr><th>Agent</th><th>Vote</th><th>Conf</th><th>Risk</th></tr><tr><td>Market Analyst</td><td class='hold'>HOLD</td><td>0%</td><td>HIGH</td></tr><tr><td>News Analyst</td><td class='hold'>HOLD</td><td>0%</td><td>HIGH</td></tr><tr><td>Quant Analyst</td><td class='hold'>HOLD</td><td>0%</td><td>HIGH</td></tr><tr><td>Risk Manager</td><td class='hold'>HOLD</td><td>0%</td><td>HIGH</td></tr></table>
+                    </div>
+                    <div class="detail-card">
+                        <h3>Technicals</h3>
+                        <p>RSI: 63 | MACD: 21.3163 | Beta: 1.672</p>
+                        <p>P/E: 42.538464 | Analyst: strong_buy</p>
+                        <p>52W: $154.47 — $510.75</p>
+                    </div>
+                    <div class='detail-card'><h3>News</h3><p>Sentiment: NEUTRAL (0.00)</p><p>Themes: </p></div>
+                </div>
+            </div>
+            <div class="stock-detail">
+                <h2 class="hold">🎯 Merck & Co., Inc. (MRK) — HOLD</h2>
+                <div class="detail-grid">
+                    <div class="detail-card">
+                        <h3>CEO Decision</h3>
+                        <p class="big-decision hold">HOLD</p>
+                        <p>Confidence: 0% | Risk: HIGH | Consensus: N/A</p>
+                        
+                        <p class="reasoning"><strong>Why:</strong> LLM unavailable - defaulting to HOLD for safety</p>
+                    </div>
+                    <div class="detail-card">
+                        <h3>Agent Votes</h3>
+                        <table class="agent-table"><tr><th>Agent</th><th>Vote</th><th>Conf</th><th>Risk</th></tr><tr><td>Market Analyst</td><td class='hold'>HOLD</td><td>0%</td><td>HIGH</td></tr><tr><td>News Analyst</td><td class='hold'>HOLD</td><td>0%</td><td>HIGH</td></tr><tr><td>Quant Analyst</td><td class='hold'>HOLD</td><td>0%</td><td>HIGH</td></tr><tr><td>Risk Manager</td><td class='hold'>HOLD</td><td>0%</td><td>HIGH</td></tr></table>
+                    </div>
+                    <div class="detail-card">
+                        <h3>Technicals</h3>
+                        <p>RSI: 57 | MACD: 1.2431 | Beta: 0.218</p>
+                        <p>P/E: 34.05128 | Analyst: buy</p>
+                        <p>52W: $76.66 — $125.14</p>
+                    </div>
+                    <div class='detail-card'><h3>News</h3><p>Sentiment: NEUTRAL (0.00)</p><p>Themes: </p></div>
+                </div>
+            </div>
+            <div class="stock-detail">
+                <h2 class="hold">🎯 Marvell Technology, Inc. (MRVL) — HOLD</h2>
+                <div class="detail-grid">
+                    <div class="detail-card">
+                        <h3>CEO Decision</h3>
+                        <p class="big-decision hold">HOLD</p>
+                        <p>Confidence: 0% | Risk: HIGH | Consensus: N/A</p>
+                        
+                        <p class="reasoning"><strong>Why:</strong> LLM unavailable - defaulting to HOLD for safety</p>
+                    </div>
+                    <div class="detail-card">
+                        <h3>Agent Votes</h3>
+                        <table class="agent-table"><tr><th>Agent</th><th>Vote</th><th>Conf</th><th>Risk</th></tr><tr><td>Market Analyst</td><td class='hold'>HOLD</td><td>0%</td><td>HIGH</td></tr><tr><td>News Analyst</td><td class='hold'>HOLD</td><td>0%</td><td>HIGH</td></tr><tr><td>Quant Analyst</td><td class='hold'>HOLD</td><td>0%</td><td>HIGH</td></tr><tr><td>Risk Manager</td><td class='hold'>HOLD</td><td>0%</td><td>HIGH</td></tr></table>
+                    </div>
+                    <div class="detail-card">
+                        <h3>Technicals</h3>
+                        <p>RSI: 69 | MACD: 34.7479 | Beta: 2.277</p>
+                        <p>P/E: 90.833336 | Analyst: strong_buy</p>
+                        <p>52W: $61.44 — $324.20</p>
+                    </div>
+                    <div class='detail-card'><h3>News</h3><p>Sentiment: NEUTRAL (0.00)</p><p>Themes: </p></div>
+                </div>
+            </div>
+            <div class="stock-detail">
+                <h2 class="hold">🎯 Morgan Stanley (MS) — HOLD</h2>
+                <div class="detail-grid">
+                    <div class="detail-card">
+                        <h3>CEO Decision</h3>
+                        <p class="big-decision hold">HOLD</p>
+                        <p>Confidence: 0% | Risk: HIGH | Consensus: N/A</p>
+                        
+                        <p class="reasoning"><strong>Why:</strong> LLM unavailable - defaulting to HOLD for safety</p>
+                    </div>
+                    <div class="detail-card">
+                        <h3>Agent Votes</h3>
+                        <table class="agent-table"><tr><th>Agent</th><th>Vote</th><th>Conf</th><th>Risk</th></tr><tr><td>Market Analyst</td><td class='hold'>HOLD</td><td>0%</td><td>HIGH</td></tr><tr><td>News Analyst</td><td class='hold'>HOLD</td><td>0%</td><td>HIGH</td></tr><tr><td>Quant Analyst</td><td class='hold'>HOLD</td><td>0%</td><td>HIGH</td></tr><tr><td>Risk Manager</td><td class='hold'>HOLD</td><td>0%</td><td>HIGH</td></tr></table>
+                    </div>
+                    <div class="detail-card">
+                        <h3>Technicals</h3>
+                        <p>RSI: 65 | MACD: 7.1020 | Beta: 1.221</p>
+                        <p>P/E: 19.189873 | Analyst: buy</p>
+                        <p>52W: $128.81 — $219.16</p>
+                    </div>
+                    <div class='detail-card'><h3>News</h3><p>Sentiment: NEUTRAL (0.00)</p><p>Themes: </p></div>
+                </div>
+            </div>
+            <div class="stock-detail">
+                <h2 class="hold">🎯 Ross Stores, Inc. (ROST) — HOLD</h2>
+                <div class="detail-grid">
+                    <div class="detail-card">
+                        <h3>CEO Decision</h3>
+                        <p class="big-decision hold">HOLD</p>
+                        <p>Confidence: 0% | Risk: HIGH | Consensus: N/A</p>
+                        
+                        <p class="reasoning"><strong>Why:</strong> LLM unavailable - defaulting to HOLD for safety</p>
+                    </div>
+                    <div class="detail-card">
+                        <h3>Agent Votes</h3>
+                        <table class="agent-table"><tr><th>Agent</th><th>Vote</th><th>Conf</th><th>Risk</th></tr><tr><td>Market Analyst</td><td class='hold'>HOLD</td><td>0%</td><td>HIGH</td></tr><tr><td>News Analyst</td><td class='hold'>HOLD</td><td>0%</td><td>HIGH</td></tr><tr><td>Quant Analyst</td><td class='hold'>HOLD</td><td>0%</td><td>HIGH</td></tr><tr><td>Risk Manager</td><td class='hold'>HOLD</td><td>0%</td><td>HIGH</td></tr></table>
+                    </div>
+                    <div class="detail-card">
+                        <h3>Technicals</h3>
+                        <p>RSI: 52 | MACD: 2.4399 | Beta: 0.866</p>
+                        <p>P/E: 32.1669 | Analyst: buy</p>
+                        <p>52W: $124.49 — $237.41</p>
+                    </div>
+                    <div class='detail-card'><h3>News</h3><p>Sentiment: NEUTRAL (0.00)</p><p>Themes: </p></div>
+                </div>
+            </div>
+
+
+            <h2>📚 Learning Insights This Hour</h2>
+            <div class="overview"><pre style="white-space: pre-wrap; color: #ccc;">=== HOURLY LEARNING FEEDBACK ===
+Previous Hour (09:48):
+Overall Accuracy: 80% (4/5 correct)
+
+  ✅ BRK-B: Recommended HOLD @ $488.13 → Now $487.00 (-0.23%)
+  ✅ MRK: Recommended HOLD @ $120.79 → Now $119.52 (-1.05%)
+  ❌ MRVL: Recommended HOLD @ $263.47 → Now $288.85 (+9.63%)
+  ✅ MS: Recommended HOLD @ $211.93 → Now $212.24 (+0.15%)
+  ✅ TJX: Recommended HOLD @ $160.71 → Now $159.75 (-0.60%)
+
+  Best pick: MRVL (+9.63%)
+  Worst pick: MRK (-1.05%)
+
+Key Insight: Good hour — agents are reading the market well. Consider maintaining current strategy.
+
+Multi-Hour Trend: stable
+  Accuracy is stable — system is performing consistently.</pre></div>
+
+<div class="disclaimer">
+⚠️ DISCLAIMER: This is AI-generated HOURLY analysis for YOUR reference only.<br>
+This is NOT financial advice. Always do your own research before trading.<br>
+AI models can be wrong. Past performance does not guarantee future results.<br>
+Each hour the system reviews its previous picks and learns from outcomes.
+</div>
+
+</body>
+</html>

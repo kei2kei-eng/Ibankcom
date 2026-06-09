@@ -1,0 +1,14 @@
+services:
+  crayfish:
+    build: .
+    container_name: crayfish-ai-ibank
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - TZ=US/Eastern
+    volumes:
+      # Persist reports, tracker state, and learning DB across restarts
+      - ./reports:/app/reports
+      - ./decision_journal.db:/app/decision_journal.db
+      - ./hourly_tracker_state.json:/app/hourly_tracker_state.json
+    ports: []  # No ports needed — outbound Telegram only

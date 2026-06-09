@@ -1,0 +1,233 @@
+{
+  "history": [
+    {
+      "timestamp": "2026-06-08T09:47:37.440869",
+      "hour_label": "09:47",
+      "decisions": {
+        "BRK-B": {
+          "action": "HOLD",
+          "confidence": 0.0,
+          "target_price": null,
+          "stop_loss": null,
+          "price_at_analysis": 488.1300048828125,
+          "reasoning": "LLM unavailable - defaulting to HOLD for safety"
+        },
+        "MRK": {
+          "action": "HOLD",
+          "confidence": 0.0,
+          "target_price": null,
+          "stop_loss": null,
+          "price_at_analysis": 120.79000091552734,
+          "reasoning": "LLM unavailable - defaulting to HOLD for safety"
+        },
+        "MRVL": {
+          "action": "HOLD",
+          "confidence": 0.0,
+          "target_price": null,
+          "stop_loss": null,
+          "price_at_analysis": 263.4700012207031,
+          "reasoning": "LLM unavailable - defaulting to HOLD for safety"
+        },
+        "MS": {
+          "action": "HOLD",
+          "confidence": 0.0,
+          "target_price": null,
+          "stop_loss": null,
+          "price_at_analysis": 211.92999267578125,
+          "reasoning": "LLM unavailable - defaulting to HOLD for safety"
+        },
+        "WFC": {
+          "action": "HOLD",
+          "confidence": 0.0,
+          "target_price": null,
+          "stop_loss": null,
+          "price_at_analysis": 81.94000244140625,
+          "reasoning": "LLM unavailable - defaulting to HOLD for safety"
+        }
+      },
+      "summary": {
+        "buys": [],
+        "sells": [],
+        "holds": [
+          "BRK-B",
+          "MRK",
+          "MRVL",
+          "MS",
+          "WFC"
+        ]
+      }
+    },
+    {
+      "timestamp": "2026-06-08T09:48:26.975037",
+      "hour_label": "09:48",
+      "decisions": {
+        "BRK-B": {
+          "action": "HOLD",
+          "confidence": 0.0,
+          "target_price": null,
+          "stop_loss": null,
+          "price_at_analysis": 488.1300048828125,
+          "reasoning": "LLM unavailable - defaulting to HOLD for safety"
+        },
+        "MRK": {
+          "action": "HOLD",
+          "confidence": 0.0,
+          "target_price": null,
+          "stop_loss": null,
+          "price_at_analysis": 120.79000091552734,
+          "reasoning": "LLM unavailable - defaulting to HOLD for safety"
+        },
+        "MRVL": {
+          "action": "HOLD",
+          "confidence": 0.0,
+          "target_price": null,
+          "stop_loss": null,
+          "price_at_analysis": 263.4700012207031,
+          "reasoning": "LLM unavailable - defaulting to HOLD for safety"
+        },
+        "MS": {
+          "action": "HOLD",
+          "confidence": 0.0,
+          "target_price": null,
+          "stop_loss": null,
+          "price_at_analysis": 211.92999267578125,
+          "reasoning": "LLM unavailable - defaulting to HOLD for safety"
+        },
+        "TJX": {
+          "action": "HOLD",
+          "confidence": 0.0,
+          "target_price": null,
+          "stop_loss": null,
+          "price_at_analysis": 160.7100067138672,
+          "reasoning": "LLM unavailable - defaulting to HOLD for safety"
+        }
+      },
+      "summary": {
+        "buys": [],
+        "sells": [],
+        "holds": [
+          "BRK-B",
+          "MRK",
+          "MRVL",
+          "MS",
+          "TJX"
+        ]
+      }
+    },
+    {
+      "timestamp": "2026-06-08T10:00:57.057660",
+      "hour_label": "10:00",
+      "decisions": {
+        "BRK-B": {
+          "action": "HOLD",
+          "confidence": 0.0,
+          "target_price": null,
+          "stop_loss": null,
+          "price_at_analysis": 488.1300048828125,
+          "reasoning": "LLM unavailable - defaulting to HOLD for safety"
+        },
+        "MRK": {
+          "action": "HOLD",
+          "confidence": 0.0,
+          "target_price": null,
+          "stop_loss": null,
+          "price_at_analysis": 120.79000091552734,
+          "reasoning": "LLM unavailable - defaulting to HOLD for safety"
+        },
+        "MRVL": {
+          "action": "HOLD",
+          "confidence": 0.0,
+          "target_price": null,
+          "stop_loss": null,
+          "price_at_analysis": 263.4700012207031,
+          "reasoning": "LLM unavailable - defaulting to HOLD for safety"
+        },
+        "MS": {
+          "action": "HOLD",
+          "confidence": 0.0,
+          "target_price": null,
+          "stop_loss": null,
+          "price_at_analysis": 211.92999267578125,
+          "reasoning": "LLM unavailable - defaulting to HOLD for safety"
+        },
+        "WFC": {
+          "action": "HOLD",
+          "confidence": 0.0,
+          "target_price": null,
+          "stop_loss": null,
+          "price_at_analysis": 81.94000244140625,
+          "reasoning": "LLM unavailable - defaulting to HOLD for safety"
+        }
+      },
+      "summary": {
+        "buys": [],
+        "sells": [],
+        "holds": [
+          "BRK-B",
+          "MRK",
+          "MRVL",
+          "MS",
+          "WFC"
+        ]
+      }
+    }
+  ],
+  "current_hour": {
+    "timestamp": "2026-06-09T01:12:08.590941",
+    "hour_label": "01:12",
+    "decisions": {
+      "AMAT": {
+        "action": "HOLD",
+        "confidence": 0.0,
+        "target_price": null,
+        "stop_loss": null,
+        "price_at_analysis": 492.1700134277344,
+        "reasoning": "LLM unavailable - defaulting to HOLD for safety"
+      },
+      "MRK": {
+        "action": "HOLD",
+        "confidence": 0.0,
+        "target_price": null,
+        "stop_loss": null,
+        "price_at_analysis": 119.5199966430664,
+        "reasoning": "LLM unavailable - defaulting to HOLD for safety"
+      },
+      "MRVL": {
+        "action": "HOLD",
+        "confidence": 0.0,
+        "target_price": null,
+        "stop_loss": null,
+        "price_at_analysis": 288.8500061035156,
+        "reasoning": "LLM unavailable - defaulting to HOLD for safety"
+      },
+      "MS": {
+        "action": "HOLD",
+        "confidence": 0.0,
+        "target_price": null,
+        "stop_loss": null,
+        "price_at_analysis": 212.24000549316406,
+        "reasoning": "LLM unavailable - defaulting to HOLD for safety"
+      },
+      "ROST": {
+        "action": "HOLD",
+        "confidence": 0.0,
+        "target_price": null,
+        "stop_loss": null,
+        "price_at_analysis": 227.4199981689453,
+        "reasoning": "LLM unavailable - defaulting to HOLD for safety"
+      }
+    },
+    "summary": {
+      "buys": [],
+      "sells": [],
+      "holds": [
+        "AMAT",
+        "MRK",
+        "MRVL",
+        "MS",
+        "ROST"
+      ]
+    }
+  },
+  "last_updated": "2026-06-09T01:12:08.590969"
+}
