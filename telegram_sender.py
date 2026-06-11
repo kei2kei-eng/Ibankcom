@@ -17,6 +17,7 @@ Setup:
 import json
 import logging
 import os
+import re
 import urllib.request
 import urllib.parse
 import urllib.error
@@ -25,20 +26,25 @@ from typing import Dict, Optional
 
 logger = logging.getLogger(__name__)
 
-# Telegram Bot API base URL
 TELEGRAM_API_BASE = "https://api.telegram.org/bot{token}/{method}"
 
 
+def _esc(text) -> str:
+    """
+    Escape text for Telegram HTML parse_mode.
+    Must escape &, <, > or the entire message gets rejected silently.
+    """
+    if text is None:
+        return "N/A"
+    text = str(text)
+    text = text.replace("&", "&amp;")
+    text = text.replace("<", "&lt;")
+    text = text.replace(">", "&gt;")
+    return text
+
+
 class TelegramSender:
-    """
-    Sends investment reports to Telegram.
-    
-    Features:
-    - Sends formatted text summary as Telegram message
-    - Sends HTML report as a document attachment
-    - Supports message splitting for long reports
-    - Emoji-rich formatting for readability on mobile
-    """
+    """Sends investment reports to Telegram."""
 
     def __init__(self, bot_token: str = None, chat_id: str = None):
         self.bot_token = bot_token or os.getenv("TELEGRAM_BOT_TOKEN", "")
@@ -46,18 +52,18 @@ class TelegramSender:
         self.enabled = bool(self.bot_token and self.chat_id)
 
         if self.enabled:
-            # Verify bot works on init
             me = self._api_call("getMe")
             if me:
                 bot_name = me.get("result", {}).get("username", "unknown")
                 logger.info(f"📱 Telegram bot connected: @{bot_name} → Chat {self.chat_id}")
             else:
-                logger.warning("📱 Telegram bot token invalid. Messages will fail.")
+                logger.warning("📱 Telegram bot token invalid.")
         else:
             logger.info("📱 Telegram not configured. Set TELEGRAM_BOT_TOKEN + TELEGRAM_CHAT_ID in .env")
 
+    # ── API Layer ──
+
     def _api_call(self, method: str, data: dict = None, files: dict = None) -> Optional[Dict]:
-        """Make a Telegram Bot API call."""
         if not self.bot_token:
             return None
 
@@ -65,384 +71,401 @@ class TelegramSender:
 
         try:
             if files:
-                # File upload (multipart/form-data)
-                import http.client
                 import mimetypes
-                boundary = "----PythonBoundary" + datetime.now().strftime("%Y%m%d%H%M%S%f")
+                boundary = "----PyBoundary" + datetime.now().strftime("%Y%m%d%H%M%S%f")
                 body = b""
-                
-                # Add regular fields
                 if data:
                     for key, value in data.items():
                         body += f"--{boundary}\r\n".encode()
                         body += f'Content-Disposition: form-data; name="{key}"\r\n\r\n'.encode()
                         body += f"{value}\r\n".encode()
-                
-                # Add file fields
-                for field_name, file_info in files.items():
-                    file_path, file_name, file_content = file_info
-                    mime_type = mimetypes.guess_type(file_name)[0] or "application/octet-stream"
+                for field_name, (_, file_name, file_content) in files.items():
+                    mime = mimetypes.guess_type(file_name)[0] or "application/octet-stream"
                     body += f"--{boundary}\r\n".encode()
                     body += f'Content-Disposition: form-data; name="{field_name}"; filename="{file_name}"\r\n'.encode()
-                    body += f"Content-Type: {mime_type}\r\n\r\n".encode()
-                    body += file_content
-                    body += b"\r\n"
-                
+                    body += f"Content-Type: {mime}\r\n\r\n".encode()
+                    body += file_content + b"\r\n"
                 body += f"--{boundary}--\r\n".encode()
-                
                 req = urllib.request.Request(url, data=body, method="POST")
                 req.add_header("Content-Type", f"multipart/form-data; boundary={boundary}")
-                
+
             elif data:
-                # JSON POST
-                post_data = json.dumps(data).encode("utf-8")
-                req = urllib.request.Request(url, data=post_data, method="POST")
+                req = urllib.request.Request(url, data=json.dumps(data).encode("utf-8"), method="POST")
                 req.add_header("Content-Type", "application/json")
-                
+
             else:
-                # GET
                 req = urllib.request.Request(url, method="GET")
 
-            with urllib.request.urlopen(req, timeout=30) as resp:
+            with urllib.request.urlopen(req, timeout=60) as resp:
                 result = json.loads(resp.read().decode("utf-8"))
-                if result.get("ok"):
-                    return result
-                else:
-                    logger.error(f"Telegram API error: {result.get('description', 'unknown')}")
-                    return result
+                if not result.get("ok"):
+                    logger.error(f"📱 Telegram API error: {result.get('description', 'unknown')}")
+                return result
 
         except urllib.error.HTTPError as e:
-            error_body = e.read().decode("utf-8", errors="replace")
-            logger.error(f"Telegram HTTP error {e.code}: {error_body}")
+            err = e.read().decode("utf-8", errors="replace")
+            logger.error(f"📱 Telegram HTTP {e.code}: {err}")
             return None
         except Exception as e:
-            logger.error(f"Telegram API call failed ({method}): {e}")
+            logger.error(f"📱 Telegram call failed ({method}): {e}")
             return None
 
+    # ── Send Methods ──
+
     def send_report(self, report: Dict) -> bool:
-        """
-        Send a complete hourly report via Telegram.
-        
-        Sends:
-        1. A formatted summary message (with key decisions)
-        2. The full HTML report as a document attachment
-        """
+        """Send complete hourly report via Telegram."""
         if not self.enabled:
             logger.info("📱 Telegram not configured. Report saved locally only.")
             return False
 
-        success = True
+        sent_any = False
 
-        # 1. Send summary message
-        summary_msg = self._format_summary_message(report)
-        if not self._send_message(summary_msg):
-            success = False
+        # 1) Summary
+        try:
+            msg = self._fmt_summary(report)
+            if self._send_safe(msg):
+                sent_any = True
+        except Exception as e:
+            logger.error(f"📱 Summary message failed: {e}")
 
-        # 2. Send detailed stock analysis (separate messages for each)
+        # 2) Per-stock deep analysis
         for ticker, sr in report.get("stock_reports", {}).items():
-            stock_msg = self._format_stock_message(ticker, sr)
-            self._send_message(stock_msg)
+            try:
+                msg = self._fmt_stock(ticker, sr)
+                if self._send_safe(msg):
+                    sent_any = True
+            except Exception as e:
+                logger.error(f"📱 Stock message {ticker} failed: {e}")
 
-        # 3. Send "What Changed" section if available
+        # 3) "What Changed" review
         prev = report.get("prev_hour_review", {})
         if prev.get("reviews"):
-            review_msg = self._format_review_message(prev)
-            self._send_message(review_msg)
+            try:
+                msg = self._fmt_review(prev)
+                if self._send_safe(msg):
+                    sent_any = True
+            except Exception as e:
+                logger.error(f"📱 Review message failed: {e}")
 
-        # 4. Send HTML report as document
+        # 4) HTML report as file
         html_path = "report_latest.html"
         if os.path.exists(html_path):
-            with open(html_path, "rb") as f:
-                html_content = f.read()
-            caption = (
-                f"📄 Full HTML Report — {report['date']} {report['time']}\n"
-                f"Open in browser for interactive view with charts & tables."
-            )
-            self._send_document(
-                file_name=f"report_{report['date']}_{report['time'].replace(':', '')}.html",
-                file_content=html_content,
-                caption=caption,
-            )
+            try:
+                with open(html_path, "rb") as f:
+                    html_content = f.read()
+                self._send_document(
+                    file_name=f"report_{report['date']}_{report['time'].replace(':', '')}.html",
+                    file_content=html_content,
+                    caption=f"📄 Full Report — {report['date']} {report['time']}",
+                )
+            except Exception as e:
+                logger.error(f"📱 Document send failed: {e}")
 
-        if success:
-            logger.info(f"📱 Report sent to Telegram chat {self.chat_id}")
-        return success
+        if sent_any:
+            logger.info(f"📱 Report sent to Telegram ({self.chat_id})")
+        else:
+            logger.error("📱 No messages were sent successfully!")
+        return sent_any
 
-    def _send_message(self, text: str, parse_mode: str = "HTML") -> bool:
-        """Send a text message. Splits into chunks if > 4096 chars."""
-        if not self.enabled:
+    def _send_safe(self, text: str) -> bool:
+        """
+        Send a message with bulletproof retry logic.
+        Try HTML → if fails, strip to plain text → if fails, log error.
+        NEVER give up and skip remaining messages.
+        """
+        if not text or not text.strip():
+            logger.warning("📱 Skipping empty message")
             return False
 
-        # Telegram limit is 4096 chars per message
         chunks = self._split_message(text, max_len=4096)
+        all_ok = True
 
         for i, chunk in enumerate(chunks):
-            data = {
-                "chat_id": self.chat_id,
-                "text": chunk,
-                "parse_mode": parse_mode,
-                "disable_web_page_preview": True,
-            }
-            result = self._api_call("sendMessage", data=data)
-            if not result or not result.get("ok"):
-                # Try without parse_mode if HTML parsing fails
-                if i == 0:
-                    data.pop("parse_mode", None)
-                    data["text"] = self._strip_html(chunk)
-                    result = self._api_call("sendMessage", data=data)
-                if not result or not result.get("ok"):
-                    logger.error(f"Failed to send Telegram message chunk {i+1}/{len(chunks)}")
-                    return False
+            # Attempt 1: HTML mode
+            ok = self._raw_send(chunk, parse_mode="HTML")
 
-        return True
+            # Attempt 2: Plain text fallback (every chunk, not just chunk 0)
+            if not ok:
+                plain = self._strip_html(chunk)
+                logger.warning(f"📱 HTML failed for chunk {i+1}, retrying plain text...")
+                ok = self._raw_send(plain, parse_mode=None)
 
-    def _send_document(self, file_name: str, file_content: bytes, caption: str = "") -> bool:
-        """Send a file as a Telegram document."""
-        if not self.enabled:
-            return False
+            if not ok:
+                logger.error(f"📱 Chunk {i+1}/{len(chunks)} failed completely. "
+                           f"Preview: {chunk[:150]}")
+                all_ok = False
 
+        return all_ok
+
+    def _raw_send(self, text: str, parse_mode: str = None) -> bool:
+        """Low-level send. Returns True if OK."""
         data = {
             "chat_id": self.chat_id,
-            "caption": caption[:1024],  # Telegram caption limit
+            "text": text,
+            "disable_web_page_preview": True,
         }
-        files = {
-            "document": (file_name, file_name, file_content),
+        if parse_mode:
+            data["parse_mode"] = parse_mode
+
+        result = self._api_call("sendMessage", data=data)
+        if result and result.get("ok"):
+            return True
+        return False
+
+    def _send_document(self, file_name: str, file_content: bytes, caption: str = "") -> bool:
+        data = {
+            "chat_id": self.chat_id,
+            "caption": caption[:1024],
         }
+        files = {"document": (file_name, file_name, file_content)}
         result = self._api_call("sendDocument", data=data, files=files)
         if result and result.get("ok"):
             logger.info(f"📱 Document sent: {file_name}")
             return True
-        else:
-            logger.error(f"Failed to send document: {file_name}")
-            return False
+        return False
 
-    def _format_summary_message(self, report: Dict) -> str:
-        """Format the main summary message for Telegram."""
-        summary = report.get("action_summary", {})
+    # ── Formatting (ALL dynamic text goes through _esc()) ──
+
+    def _fmt_summary(self, report: Dict) -> str:
+        s = report.get("action_summary", {})
         prev = report.get("prev_hour_review", {})
         multi = report.get("multi_hour_review", {})
+        e = _esc  # shortcut
 
-        lines = []
-        lines.append(f"🏦 <b>AI Investment Bank — Hourly Report #{report.get('cycle_number', '?')}</b>")
-        lines.append(f"📅 {report['date']} {report['time']} | Regime: {report['market_regime']}")
-        lines.append(f"📊 {report.get('total_discovered', 0)} stocks scanned")
-        lines.append("")
+        L = []
+        L.append(f"🏦 <b>AI Investment Bank — Hourly Report #{report.get('cycle_number', '?')}</b>")
+        L.append(f"📅 {e(report['date'])} {e(report['time'])} | Regime: {e(report['market_regime'])}")
+        L.append(f"📊 {report.get('total_discovered', 0)} stocks scanned\n")
 
-        # Quick stats
-        buy_emoji = "🟢" if summary.get("total_buy", 0) > 0 else "⚪"
-        sell_emoji = "🔴" if summary.get("total_sell", 0) > 0 else "⚪"
-        hold_emoji = "🟡"
-        lines.append(f"{buy_emoji} BUY: <b>{summary.get('total_buy', 0)}</b>  |  "
-                     f"{sell_emoji} SELL: <b>{summary.get('total_sell', 0)}</b>  |  "
-                     f"{hold_emoji} HOLD: <b>{summary.get('total_hold', 0)}</b>")
-        lines.append("")
+        # Stats
+        be = "🟢" if s.get("total_buy", 0) > 0 else "⚪"
+        se = "🔴" if s.get("total_sell", 0) > 0 else "⚪"
+        L.append(f"{be} BUY: <b>{s.get('total_buy', 0)}</b>  |  "
+                 f"{se} SELL: <b>{s.get('total_sell', 0)}</b>  |  "
+                 f"🟡 HOLD: <b>{s.get('total_hold', 0)}</b>")
 
-        # Previous hour accuracy
+        # Prev hour
         if prev.get("reviews"):
             acc = prev.get("accuracy", 0)
-            acc_emoji = "📈" if acc > 0.6 else "📉" if acc < 0.4 else "➡️"
-            lines.append(f"{acc_emoji} <b>Prev Hour Accuracy:</b> {acc:.0%} "
-                        f"({prev.get('correct_count', 0)}/{prev.get('total_count', 0)})")
-            lines.append(f"   {prev.get('learning_notes', '')[:100]}")
-            lines.append("")
+            ae = "📈" if acc > 0.6 else "📉" if acc < 0.4 else "➡️"
+            L.append(f"\n{ae} <b>Prev Hour:</b> {acc:.0%} "
+                    f"({prev.get('correct_count', 0)}/{prev.get('total_count', 0)})\n"
+                    f"   {e(prev.get('learning_notes', '')[:100])}")
 
-        # Multi-hour trend
-        if multi.get("trend") and multi.get("trend") != "no_data":
-            trend = multi["trend"].upper()
-            trend_emoji = "📈" if trend == "IMPROVING" else "📉" if trend == "DECLINING" else "➡️"
-            lines.append(f"{trend_emoji} <b>Trend:</b> {trend}")
-            lines.append("")
+        # Trend
+        if multi.get("trend") and multi["trend"] != "no_data":
+            te = "📈" if "IMPROV" in multi["trend"].upper() else "📉" if "DECLIN" in multi["trend"].upper() else "➡️"
+            L.append(f"{te} <b>Trend:</b> {e(multi['trend'].upper())}")
 
-        # BUY recommendations
-        if summary.get("buy_recommendations"):
-            lines.append("━" * 30)
-            lines.append(f"🟢 <b>BUY RECOMMENDATIONS</b>")
-            lines.append("━" * 30)
-            for b in summary["buy_recommendations"]:
-                lines.append(f"  <b>{b['ticker']}</b> @ ${b['price']:.2f}")
-                lines.append(f"    Confidence: {b['confidence']:.0%} | Risk: {b['risk']}")
+        # BUY
+        if s.get("buy_recommendations"):
+            L.append(f"\n{'━'*20}\n🟢 <b>BUY RECOMMENDATIONS</b>\n{'━'*20}")
+            for b in s["buy_recommendations"]:
+                L.append(f"  <b>{e(b['ticker'])}</b> @ ${b['price']:.2f}")
+                L.append(f"    Conf: {b['confidence']:.0%} | Risk: {e(b['risk'])}")
                 if b.get("target"):
-                    lines.append(f"    🎯 Target: ${b['target']:.2f} | 🛑 Stop: ${b.get('stop_loss', 'N/A')}")
-                lines.append(f"    💡 {b['reasoning'][:200]}")
-                lines.append("")
+                    L.append(f"    🎯 Target: ${b['target']:.2f} | 🛑 Stop: ${b.get('stop_loss', 0):.2f}")
+                L.append(f"    💡 {e(b['reasoning'][:200])}")
 
-        # SELL recommendations
-        if summary.get("sell_recommendations"):
-            lines.append("━" * 30)
-            lines.append(f"🔴 <b>SELL RECOMMENDATIONS</b>")
-            lines.append("━" * 30)
-            for s in summary["sell_recommendations"]:
-                lines.append(f"  <b>{s['ticker']}</b> @ ${s['price']:.2f}")
-                lines.append(f"    💡 {s['reasoning'][:200]}")
-                lines.append("")
+        # SELL
+        if s.get("sell_recommendations"):
+            L.append(f"\n{'━'*20}\n🔴 <b>SELL RECOMMENDATIONS</b>\n{'━'*20}")
+            for sl in s["sell_recommendations"]:
+                L.append(f"  <b>{e(sl['ticker'])}</b> @ ${sl['price']:.2f}")
+                L.append(f"    💡 {e(sl['reasoning'][:200])}")
 
-        # HOLD list
-        if summary.get("hold_recommendations"):
-            hold_str = ", ".join(f"<b>{h['ticker']}</b>" for h in summary["hold_recommendations"])
-            lines.append(f"🟡 HOLD: {hold_str}")
-            lines.append("")
+        # HOLD
+        if s.get("hold_recommendations"):
+            holds = ", ".join(e(h['ticker']) for h in s["hold_recommendations"])
+            L.append(f"\n🟡 HOLD: {holds}")
 
-        # Top 5 quick view
+        # Top 5
         ranking = report.get("ranking_table", [])[:5]
         if ranking:
-            lines.append("━" * 30)
-            lines.append("🏆 <b>TOP 5 STOCKS</b>")
-            lines.append("━" * 30)
+            L.append(f"\n{'━'*20}\n🏆 <b>TOP 5</b>\n{'━'*20}")
             for r in ranking:
-                change_emoji = "🟢" if r["daily_change"] > 0 else "🔴"
-                lines.append(f"  {r['rank']}. <b>{r['ticker']}</b> ${r['price']:.2f} "
-                           f"{change_emoji} {r['daily_change']:+.2f}% "
-                           f"Score:{r['score']:.0f} RSI:{r['rsi']:.0f}")
+                ce = "🟢" if r["daily_change"] > 0 else "🔴"
+                L.append(f"  {r['rank']}. <b>{e(r['ticker'])}</b> ${r['price']:.2f} "
+                        f"{ce}{r['daily_change']:+.2f}% Sc:{r['score']:.0f} RSI:{r['rsi']:.0f}")
 
-        lines.append("")
-        lines.append("⏱ Next report in ~60 min")
-        lines.append("⚠️ AI-generated analysis — Not financial advice")
+        L.append("\n⏱ Next report in ~60 min")
+        L.append("⚠️ AI analysis — Not financial advice")
+        return "\n".join(L)
 
-        return "\n".join(lines)
+    def _fmt_stock(self, ticker: str, sr: Dict) -> str:
+        e = _esc
+        dec = sr.get("ceo_decision", "HOLD")
+        de = {"BUY": "🟢", "SELL": "🔴"}.get(dec, "🟡")
 
-    def _format_stock_message(self, ticker: str, sr: Dict) -> str:
-        """Format a detailed stock analysis for Telegram."""
-        decision = sr.get("ceo_decision", "HOLD")
-        decision_emoji = {"BUY": "🟢", "SELL": "🔴", "HOLD": "🟡"}.get(decision, "⚪")
-
-        lines = []
-        lines.append(f"{decision_emoji} <b>{sr.get('company_name', ticker)} ({ticker})</b>")
-        lines.append(f"  Decision: <b>{decision}</b> | Confidence: {sr.get('ceo_confidence', 0):.0%} | Risk: {sr.get('risk_level', 'N/A')}")
-        lines.append("")
+        L = []
+        L.append(f"{de} <b>{e(sr.get('company_name', ticker))} ({e(ticker)})</b>")
+        L.append(f"  <b>{e(dec)}</b> | Conf: {sr.get('ceo_confidence', 0):.0%} | Risk: {e(sr.get('risk_level', '-'))}")
 
         if sr.get("target_price"):
-            lines.append(f"  🎯 Target: ${sr['target_price']:.2f} | 🛑 Stop: ${sr.get('stop_loss', 'N/A')}")
-            lines.append("")
+            L.append(f"  🎯 Target: ${sr['target_price']:.2f} | 🛑 Stop: ${sr.get('stop_loss', 0):.2f}")
 
-        # CEO reasoning
-        lines.append(f"  💡 <b>Why:</b> {sr.get('ceo_reasoning', 'N/A')[:400]}")
-        lines.append("")
+        L.append(f"\n  💡 {e(sr.get('ceo_reasoning', '-')[:400])}")
 
         # Agent votes
-        lines.append("  <b>Agent Votes:</b>")
-        for agent_name, vote in sr.get("agent_votes", {}).items():
-            vote_emoji = {"BUY": "🟢", "SELL": "🔴"}.get(vote["action"], "🟡")
-            lines.append(f"    {vote_emoji} {agent_name}: {vote['action']} "
-                        f"({vote['confidence']:.0%}, {vote['risk']})")
-        lines.append("")
+        votes = sr.get("agent_votes", {})
+        if votes:
+            L.append(f"\n  <b>Agent Votes:</b>")
+            for aname, v in votes.items():
+                ve = {"BUY": "🟢", "SELL": "🔴"}.get(v.get("action", ""), "🟡")
+                L.append(f"    {ve} {e(aname)}: {e(v.get('action', '-'))} "
+                        f"({v.get('confidence', 0):.0%}, {e(v.get('risk', '-'))})")
 
         # Technicals
-        lines.append("  📊 <b>Technicals:</b>")
-        lines.append(f"    RSI: {sr.get('rsi', 0):.0f} | MACD: {sr.get('macd', 0):.4f} | Beta: {sr.get('beta', 'N/A')}")
-        lines.append(f"    SMA50: ${sr.get('sma_50', 0):.2f} | SMA200: ${sr.get('sma_200', 0):.2f}")
-        lines.append(f"    P/E: {sr.get('pe_ratio', 'N/A')} | Analyst: {sr.get('analyst_rating', 'N/A')}")
-        lines.append(f"    52W: ${sr.get('52w_low', 0):.2f} — ${sr.get('52w_high', 0):.2f}")
+        L.append(f"\n  📊 RSI: {sr.get('rsi', 0):.0f} | MACD: {sr.get('macd', 0):.4f} | Beta: {e(sr.get('beta', '-'))}")
+        L.append(f"  SMA50: ${sr.get('sma_50', 0):.2f} | SMA200: ${sr.get('sma_200', 0):.2f}")
+        L.append(f"  P/E: {e(sr.get('pe_ratio', '-'))} | Analyst: {e(sr.get('analyst_rating', '-'))}")
+        L.append(f"  52W: ${sr.get('52w_low', 0):.2f} — ${sr.get('52w_high', 0):.2f}")
 
-        return "\n".join(lines)
+        return "\n".join(L)
 
-    def _format_review_message(self, prev: Dict) -> str:
-        """Format the "What Changed" review for Telegram."""
-        lines = []
-        lines.append(f"📊 <b>What Changed Since {prev.get('hour_label', 'Last Hour')}</b>")
-        lines.append(f"  Accuracy: {prev.get('accuracy', 0):.0%} "
-                    f"({prev.get('correct_count', 0)}/{prev.get('total_count', 0)})")
-        lines.append("")
+    def _fmt_review(self, prev: Dict) -> str:
+        e = _esc
+        L = []
+        L.append(f"📊 <b>What Changed Since {e(prev.get('hour_label', 'Last Hour'))}</b>")
+        L.append(f"  Accuracy: {prev.get('accuracy', 0):.0%} "
+                f"({prev.get('correct_count', 0)}/{prev.get('total_count', 0)})\n")
 
         for r in prev.get("reviews", []):
-            icon = "✅" if r["was_correct"] else "❌"
-            lines.append(f"  {icon} <b>{r['ticker']}</b> {r['prev_action']} "
-                        f"${r['prev_price']:.2f}→${r['current_price']:.2f} ({r['change_pct']:+.2f}%)")
+            ic = "✅" if r["was_correct"] else "❌"
+            L.append(f"  {ic} <b>{e(r['ticker'])}</b> {e(r['prev_action'])} "
+                    f"${r['prev_price']:.2f}→${r['current_price']:.2f} ({r['change_pct']:+.2f}%)")
             if r.get("target_hit"):
-                lines.append(f"     🎯 Target hit!")
+                L.append(f"     🎯 Target hit!")
             if r.get("stop_hit"):
-                lines.append(f"     🛑 Stop loss hit!")
+                L.append(f"     🛑 Stop hit!")
 
-        lines.append(f"\n  📝 {prev.get('learning_notes', '')[:200]}")
+        L.append(f"\n  📝 {e(prev.get('learning_notes', '')[:200])}")
+        return "\n".join(L)
 
-        return "\n".join(lines)
+    # ── Utilities ──
 
     def _split_message(self, text: str, max_len: int = 4096) -> list:
-        """Split a long message into chunks that fit Telegram limits."""
         if len(text) <= max_len:
             return [text]
-
         chunks = []
-        # Try to split at double newlines (paragraph breaks)
-        paragraphs = text.split("\n\n")
-        current_chunk = ""
-
-        for para in paragraphs:
-            if len(current_chunk) + len(para) + 2 > max_len:
-                if current_chunk:
-                    chunks.append(current_chunk.strip())
-                    current_chunk = ""
-                # If single paragraph is too long, split at newlines
-                if len(para) > max_len:
-                    for line in para.split("\n"):
-                        if len(current_chunk) + len(line) + 1 > max_len:
-                            chunks.append(current_chunk.strip())
-                            current_chunk = line + "\n"
-                        else:
-                            current_chunk += line + "\n"
-                else:
-                    current_chunk = para + "\n\n"
+        for para in text.split("\n\n"):
+            if not chunks or len(chunks[-1]) + len(para) + 2 > max_len:
+                chunks.append(para)
             else:
-                current_chunk += para + "\n\n"
-
-        if current_chunk.strip():
-            chunks.append(current_chunk.strip())
-
-        return chunks
+                chunks[-1] += "\n\n" + para
+        return [c.strip() for c in chunks if c.strip()]
 
     def _strip_html(self, text: str) -> str:
-        """Strip HTML tags for fallback plain-text sending."""
-        import re
         text = re.sub(r'<b>(.*?)</b>', r'\1', text)
         text = re.sub(r'<i>(.*?)</i>', r'\1', text)
-        text = re.sub(r'<code>(.*?)</code>', r'\1', text)
         text = re.sub(r'<[^>]+>', '', text)
+        # Also unescape HTML entities for plain text
+        text = text.replace("&amp;", "&")
+        text = text.replace("&lt;", "<")
+        text = text.replace("&gt;", ">")
         return text
 
     def test_connection(self) -> bool:
-        """Test the Telegram bot connection."""
+        """Test the Telegram bot connection and send a sample report."""
         if not self.enabled:
             print("❌ Telegram not configured.")
-            print("   Set TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID in .env")
             return False
 
         result = self._api_call("getMe")
-        if result and result.get("ok"):
-            bot_info = result.get("result", {})
-            print(f"✅ Bot connected: @{bot_info.get('username', 'unknown')}")
-            print(f"   Bot name: {bot_info.get('first_name', 'unknown')}")
-            print(f"   Chat ID: {self.chat_id}")
+        if not result or not result.get("ok"):
+            print("❌ Bot token invalid.")
+            return False
 
-            # Send test message
-            test_result = self._send_message(
-                "🦞 <b>小龍蝦 AI Investment Bank</b>\n\n"
-                "✅ Telegram connection successful!\n"
-                "You will receive hourly stock reports here."
-            )
-            if test_result:
-                print("✅ Test message sent!")
-                return True
-            else:
-                print("❌ Test message failed. Check CHAT_ID.")
-                return False
+        bot = result["result"]
+        print(f"✅ Bot: @{bot.get('username')} ({bot.get('first_name')})")
+        print(f"   Chat ID: {self.chat_id}")
+
+        # Send test with realistic stock data containing special chars
+        test_report = {
+            "date": datetime.now().strftime("%Y-%m-%d"),
+            "time": datetime.now().strftime("%H:%M"),
+            "cycle_number": "TEST",
+            "market_regime": "BULL",
+            "total_discovered": 156,
+            "action_summary": {
+                "total_buy": 2, "total_sell": 0, "total_hold": 3,
+                "buy_recommendations": [
+                    {"ticker": "AAPL", "price": 195.50, "confidence": 0.85,
+                     "risk": "MEDIUM", "target": 210.0, "stop_loss": 188.0,
+                     "reasoning": "RSI at 58 < 70 (not overbought). Revenue > 5%. MACD bullish & breaking SMA200."},
+                    {"ticker": "JNJ", "price": 155.20, "confidence": 0.72,
+                     "risk": "LOW", "target": 170.0, "stop_loss": 148.0,
+                     "reasoning": "Johnson & Johnson showing strong dividend yield > 3%. P/E < sector average."},
+                ],
+                "sell_recommendations": [],
+                "hold_recommendations": [
+                    {"ticker": "MSFT"}, {"ticker": "GOOGL"}, {"ticker": "PG"},
+                ],
+            },
+            "prev_hour_review": {
+                "hour_label": "10:05",
+                "accuracy": 0.80,
+                "correct_count": 4,
+                "total_count": 5,
+                "learning_notes": "Good hour — agents reading market well. Procter & Gamble pick was correct.",
+                "reviews": [
+                    {"ticker": "AAPL", "prev_action": "BUY", "prev_price": 194.0,
+                     "current_price": 195.50, "change_pct": 0.77, "was_correct": True,
+                     "target_hit": False, "stop_hit": False},
+                    {"ticker": "PG", "prev_action": "BUY", "prev_price": 162.0,
+                     "current_price": 164.30, "change_pct": 1.42, "was_correct": True,
+                     "target_hit": True, "stop_hit": False},
+                ],
+            },
+            "multi_hour_review": {"trend": "improving"},
+            "ranking_table": [
+                {"rank": 1, "ticker": "AAPL", "price": 195.50, "daily_change": 1.25, "score": 95, "rsi": 58},
+                {"rank": 2, "ticker": "NVDA", "price": 890.0, "daily_change": 2.30, "score": 91, "rsi": 62},
+                {"rank": 3, "ticker": "JNJ", "price": 155.20, "daily_change": 0.80, "score": 88, "rsi": 55},
+            ],
+            "stock_reports": {
+                "AAPL": {
+                    "company_name": "Apple Inc.",
+                    "ceo_decision": "BUY", "ceo_confidence": 0.85, "risk_level": "MEDIUM",
+                    "target_price": 210.0, "stop_loss": 188.0,
+                    "ceo_reasoning": "Strong momentum. RSI at 58 < 70, not overbought. "
+                                    "Revenue growth > 5% YoY. MACD bullish crossover & SMA200 support.",
+                    "agent_votes": {
+                        "Market Analyst": {"action": "BUY", "confidence": 0.88, "risk": "MEDIUM"},
+                        "News Analyst": {"action": "BUY", "confidence": 0.80, "risk": "LOW"},
+                        "Quant Analyst": {"action": "HOLD", "confidence": 0.60, "risk": "MEDIUM"},
+                        "Risk Manager": {"action": "BUY", "confidence": 0.82, "risk": "MEDIUM"},
+                    },
+                    "rsi": 58, "macd": 1.23, "beta": 1.15,
+                    "sma_50": 190.0, "sma_200": 193.5,
+                    "pe_ratio": 28.5, "analyst_rating": "buy",
+                    "52w_low": 164.08, "52w_high": 199.62,
+                },
+            },
+        }
+
+        print(f"\n📤 Sending test report with special characters (& < >)...")
+        ok = self.send_report(test_report)
+        if ok:
+            print(f"✅ Test report sent! Check your Telegram.")
+            return True
         else:
-            print("❌ Bot token invalid. Check TELEGRAM_BOT_TOKEN.")
+            print(f"❌ Test report failed. Check logs above.")
             return False
 
 
-# ── CLI test ──
 if __name__ == "__main__":
     import sys
     logging.basicConfig(level=logging.INFO, format="%(message)s")
-
     sender = TelegramSender()
     if sender.test_connection():
-        print("\n🎉 Telegram is ready to receive hourly reports!")
+        print("\n🎉 Telegram is ready!")
     else:
         print("\n❌ Setup needed:")
-        print("   1. Talk to @BotFather on Telegram → /newbot")
-        print("   2. Copy the token")
+        print("   1. Talk to @BotFather → /newbot")
+        print("   2. Copy token")
         print("   3. Send /start to your bot")
-        print("   4. Get your chat ID (talk to @userinfobot)")
+        print("   4. Get chat ID from @userinfobot")
         print("   5. Add to .env:")
-        print("      TELEGRAM_BOT_TOKEN=your-token-here")
-        print("      TELEGRAM_CHAT_ID=your-chat-id-here")
+        print("      TELEGRAM_BOT_TOKEN=your-token")
+        print("      TELEGRAM_CHAT_ID=your-chat-id")
