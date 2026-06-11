@@ -189,25 +189,23 @@ class StockDiscoveryEngine:
         This detects institutional buying/selling activity.
         """
         unusual = []
-        batch_size = 10
 
-        for i in range(0, len(tickers), batch_size):
-            batch = tickers[i:i + batch_size]
-            for ticker in batch:
-                try:
-                    stock = yf.Ticker(ticker)
-                    hist = stock.history(period="1mo")
-                    if hist.empty or len(hist) < 5:
-                        continue
-
-                    avg_vol = hist["Volume"].iloc[:-1].mean()
-                    today_vol = hist["Volume"].iloc[-1]
-
-                    if avg_vol > 0 and today_vol > avg_vol * volume_multiplier:
-                        unusual.append(ticker)
-
-                except Exception:
+        for ticker in tickers:
+            try:
+                time.sleep(0.8)  # Rate limit
+                stock = yf.Ticker(ticker)
+                hist = stock.history(period="1mo")
+                if hist.empty or len(hist) < 5:
                     continue
+
+                avg_vol = hist["Volume"].iloc[:-1].mean()
+                today_vol = hist["Volume"].iloc[-1]
+
+                if avg_vol > 0 and today_vol > avg_vol * volume_multiplier:
+                    unusual.append(ticker)
+
+            except Exception:
+                continue
 
         logger.info(f"Unusual volume: found {len(unusual)} stocks out of {len(tickers)} scanned")
         return unusual
@@ -275,36 +273,34 @@ class StockDiscoveryEngine:
         - RSI recovery from oversold
         """
         breakouts = []
-        batch_size = 10
 
-        for i in range(0, len(tickers), batch_size):
-            batch = tickers[i:i + batch_size]
-            for ticker in batch:
-                try:
-                    stock = yf.Ticker(ticker)
-                    hist = stock.history(period="6mo")
-                    if hist.empty or len(hist) < 50:
-                        continue
-
-                    close = hist["Close"]
-                    high_52w = close.rolling(252).max().iloc[-1] if len(close) >= 252 else close.max()
-
-                    # Check: within 3% of 52-week high
-                    current = close.iloc[-1]
-                    if high_52w > 0 and current >= high_52w * 0.97:
-                        breakouts.append(ticker)
-                        continue
-
-                    # Check: SMA50 crosses above SMA200 (golden cross)
-                    if len(close) >= 200:
-                        sma50 = close.rolling(50).mean()
-                        sma200 = close.rolling(200).mean()
-                        if (sma50.iloc[-1] > sma200.iloc[-1] and
-                            sma50.iloc[-2] <= sma200.iloc[-2]):
-                            breakouts.append(ticker)
-
-                except Exception:
+        for ticker in tickers:
+            try:
+                time.sleep(0.8)  # Rate limit
+                stock = yf.Ticker(ticker)
+                hist = stock.history(period="6mo")
+                if hist.empty or len(hist) < 50:
                     continue
+
+                close = hist["Close"]
+                high_52w = close.rolling(252).max().iloc[-1] if len(close) >= 252 else close.max()
+
+                # Check: within 3% of 52-week high
+                current = close.iloc[-1]
+                if high_52w > 0 and current >= high_52w * 0.97:
+                    breakouts.append(ticker)
+                    continue
+
+                # Check: SMA50 crosses above SMA200 (golden cross)
+                if len(close) >= 200:
+                    sma50 = close.rolling(50).mean()
+                    sma200 = close.rolling(200).mean()
+                    if (sma50.iloc[-1] > sma200.iloc[-1] and
+                        sma50.iloc[-2] <= sma200.iloc[-2]):
+                        breakouts.append(ticker)
+
+            except Exception:
+                continue
 
         logger.info(f"Breakout scanner: found {len(breakouts)} breakouts")
         return breakouts
