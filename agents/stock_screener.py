@@ -138,15 +138,13 @@ Respond ONLY with valid JSON:
                           discovery_data: Dict = None, top_n: int = 50) -> List[StockScore]:
         """
         Phase 1: Scan ALL discovered stocks using quantitative rules.
-        This is a fast, local computation — no LLM needed.
-        
-        Args:
-            market_fetcher: Data fetcher with discovered tickers
-            portfolio_holdings: Current portfolio positions
-            discovery_data: Dict from StockDiscoveryEngine with discovery metadata
-            top_n: Number of top stocks to keep (default 50)
+        Uses batch download to minimize Yahoo Finance API calls.
         """
         logger.info(f"🔬 Stock Screener scanning {len(market_fetcher.tickers)} discovered stocks...")
+
+        # Trigger batch download ONCE for all tickers (3-4 API calls instead of 150+)
+        market_fetcher._ensure_batch_data()
+
         scores: List[StockScore] = []
 
         for ticker in market_fetcher.tickers:
