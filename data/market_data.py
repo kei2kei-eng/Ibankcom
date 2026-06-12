@@ -7,6 +7,7 @@ Instead of 150 individual calls → a few batch calls.
 """
 
 import time
+import warnings
 import yfinance as yf
 import pandas as pd
 import numpy as np
@@ -16,6 +17,13 @@ import logging
 import ta
 
 logger = logging.getLogger(__name__)
+
+# Suppress yfinance's noisy "possibly delisted" and "No data found" warnings
+warnings.filterwarnings("ignore", message=".*possibly delisted.*")
+warnings.filterwarnings("ignore", message=".*No data found.*")
+# Also suppress the specific yfinance logger noise
+yf_logger = logging.getLogger("yfinance")
+yf_logger.setLevel(logging.ERROR)
 
 
 class MarketDataFetcher:
@@ -35,6 +43,11 @@ class MarketDataFetcher:
         self._batch_data: Dict[str, pd.DataFrame] = {}
         self._batch_time: Optional[datetime] = None
         self._batch_duration = timedelta(minutes=30)
+        # Info cache: 4 hours (was 2hr — longer cache = fewer API calls)
+        self._info_cache_duration = timedelta(hours=4)
+        # Rate limit guard for company info calls
+        self._last_info_call_time: float = 0
+        self._info_call_interval: float = 1.2  # seconds between info calls (was 0.8)
 
     def _is_cache_valid(self, key: str, time_dict: dict, duration: timedelta) -> bool:
         return key in time_dict and datetime.now() - time_dict[key] < duration
@@ -211,12 +224,18 @@ class MarketDataFetcher:
             return {"current_price": float(df["Close"].iloc[-1]) if not df.empty else 0}
 
     def get_company_info(self, ticker: str) -> Dict:
-        """Fetch company info with caching (2hr cache)."""
-        if self._is_cache_valid(ticker, self._info_cache_time, timedelta(hours=2)):
+        """Fetch company info with 4hr caching and rate-limit-safe throttling."""
+        # Check cache first (4 hour cache)
+        if self._is_cache_valid(ticker, self._info_cache_time, self._info_cache_duration):
             return self._info_cache.get(ticker, {"sector": "Unknown", "industry": "Unknown", "company_name": ticker})
 
+        # Throttle: ensure minimum gap between info API calls
+        elapsed_since_last = time.time() - self._last_info_call_time
+        if elapsed_since_last < self._info_call_interval:
+            time.sleep(self._info_call_interval - elapsed_since_last)
+
         try:
-            time.sleep(0.8)
+            self._last_info_call_time = time.time()
             stock = yf.Ticker(ticker)
             info = stock.info or {}
             result = {
@@ -243,9 +262,9 @@ class MarketDataFetcher:
             self._info_cache_time[ticker] = datetime.now()
             return result
         except Exception as e:
-            if "Too Many" in str(e) or "429" in str(e):
-                logger.warning(f"⚠️ Rate limited on {ticker} info, backing off 10s...")
-                time.sleep(10)
+            if "Too Many" in str(e) or "429" in str(e) or "Rate" in str(e):
+                logger.warning(f"⚠️ Rate limited on {ticker} info, backing off 15s...")
+                time.sleep(15)
             else:
                 logger.debug(f"Info error for {ticker}: {e}")
             return {"sector": "Unknown", "industry": "Unknown", "company_name": ticker}
@@ -259,6 +278,18 @@ class MarketDataFetcher:
             info = self.get_company_info(ticker)
             if indicators:
                 results[ticker] = {**indicators, **info}
+        return results
+
+    def get_company_info_batch(self, tickers: List[str]) -> Dict[str, Dict]:
+        """
+        Fetch company info for a list of tickers with proper throttling.
+        Returns dict: {ticker: company_info_dict}
+        """
+        results = {}
+        for i, ticker in enumerate(tickers):
+            results[ticker] = self.get_company_info(ticker)
+            if (i + 1) % 10 == 0:
+                logger.info(f"  📋 Company info: {i+1}/{len(tickers)} fetched")
         return results
 
     def generate_market_summary(self, ticker: str) -> str:
