@@ -137,30 +137,67 @@ Respond ONLY with valid JSON:
     def screen_all_stocks(self, market_fetcher, portfolio_holdings: Dict = None,
                           discovery_data: Dict = None, top_n: int = 50) -> List[StockScore]:
         """
-        Phase 1: Scan ALL discovered stocks using quantitative rules.
-        Uses batch download to minimize Yahoo Finance API calls.
+        Two-pass screening to minimize Yahoo Finance API calls:
+          Pass 1: Score ALL stocks using batch data only (technical indicators — no extra API calls)
+          Pass 2: Fetch company info ONLY for the top candidates (50 calls instead of 150+)
         """
         logger.info(f"🔬 Stock Screener scanning {len(market_fetcher.tickers)} discovered stocks...")
 
         # Trigger batch download ONCE for all tickers (3-4 API calls instead of 150+)
         market_fetcher._ensure_batch_data()
 
-        scores: List[StockScore] = []
+        # ═══════════════════════════════════════════
+        # PASS 1: Quick score using technical indicators ONLY (batch cache, 0 extra API calls)
+        # ═══════════════════════════════════════════
+        logger.info(f"  📊 Pass 1: Quick-scoring all {len(market_fetcher.tickers)} stocks with batch data...")
+        preliminary_scores: List[Tuple[str, Dict, float]] = []  # (ticker, indicators, quick_score)
 
         for ticker in market_fetcher.tickers:
             try:
                 indicators = market_fetcher.get_technical_indicators(ticker)
-                company_info = market_fetcher.get_company_info(ticker)
-
                 if not indicators or not indicators.get("current_price"):
                     continue
 
-                score = self._score_stock(ticker, indicators, company_info, portfolio_holdings)
+                # Quick score based on technicals only (no company info)
+                quick_score = self._quick_technical_score(indicators)
 
-                # Boost score based on discovery data (stocks found by multiple strategies)
+                # Boost for discovery data
                 if discovery_data and ticker in discovery_data:
                     disc = discovery_data[ticker]
-                    discovery_bonus = disc.discovery_score * 3  # Each strategy match = +3 points
+                    quick_score += disc.discovery_score * 3
+
+                preliminary_scores.append((ticker, indicators, quick_score))
+
+            except Exception as e:
+                logger.debug(f"Error quick-scoring {ticker}: {e}")
+
+        # Sort by quick score, keep top candidates for detailed scoring
+        preliminary_scores.sort(key=lambda x: x[2], reverse=True)
+        # Take top_n * 2 for pass 2 (wider net in case hard rules filter some out)
+        pass2_count = min(len(preliminary_scores), top_n * 2)
+        pass2_candidates = preliminary_scores[:pass2_count]
+
+        logger.info(f"  ✅ Pass 1 complete: {len(preliminary_scores)} stocks scored, "
+                     f"top {pass2_count} advance to Pass 2")
+
+        # ═══════════════════════════════════════════
+        # PASS 2: Fetch company info ONLY for top candidates
+        # ═══════════════════════════════════════════
+        logger.info(f"  📋 Pass 2: Fetching company info for {pass2_count} candidates...")
+        pass2_tickers = [t for t, _, _ in pass2_candidates]
+        company_infos = market_fetcher.get_company_info_batch(pass2_tickers)
+
+        # Now do full scoring for pass 2 candidates
+        scores: List[StockScore] = []
+        for ticker, indicators, quick_score in pass2_candidates:
+            try:
+                company_info = company_infos.get(ticker, {"sector": "Unknown", "industry": "Unknown", "company_name": ticker})
+                score = self._score_stock(ticker, indicators, company_info, portfolio_holdings)
+
+                # Boost score based on discovery data
+                if discovery_data and ticker in discovery_data:
+                    disc = discovery_data[ticker]
+                    discovery_bonus = disc.discovery_score * 3
                     score.total_score += discovery_bonus
                     score.rule_breakdown["discovery_bonus"] = discovery_bonus
                     if disc.discovery_methods:
@@ -169,7 +206,25 @@ Respond ONLY with valid JSON:
                 scores.append(score)
 
             except Exception as e:
-                logger.debug(f"Error screening {ticker}: {e}")
+                logger.debug(f"Error scoring {ticker}: {e}")
+
+        # Also add pass-1-only stocks that didn't make pass 2 (with minimal info)
+        # so we still have a wide ranking. These get default company info.
+        pass2_ticker_set = set(pass2_tickers)
+        for ticker, indicators, quick_score in preliminary_scores[pass2_count:]:
+            if len(scores) >= top_n:
+                break
+            try:
+                default_info = {"sector": "Unknown", "industry": "Unknown", "company_name": ticker}
+                score = self._score_stock(ticker, indicators, default_info, portfolio_holdings)
+                if discovery_data and ticker in discovery_data:
+                    disc = discovery_data[ticker]
+                    discovery_bonus = disc.discovery_score * 3
+                    score.total_score += discovery_bonus
+                    score.rule_breakdown["discovery_bonus"] = discovery_bonus
+                scores.append(score)
+            except Exception:
+                pass
 
         # Sort by total score descending
         scores.sort(key=lambda s: s.total_score, reverse=True)
@@ -179,7 +234,8 @@ Respond ONLY with valid JSON:
 
         self.screening_history.append({
             "timestamp": datetime.now().isoformat(),
-            "total_scanned": len(scores),
+            "total_scanned": len(preliminary_scores),
+            "pass2_fetched_info": pass2_count,
             "top_5": [s.to_dict() for s in scores[:5]],
         })
 
@@ -194,6 +250,54 @@ Respond ONLY with valid JSON:
                         f"rec={s.recommendation:16s}  {status}")
 
         return scores
+
+    def _quick_technical_score(self, indicators: Dict) -> float:
+        """
+        Quick scoring using only technical indicators (no API calls).
+        Used in Pass 1 to narrow down candidates before fetching company info.
+        """
+        score = 0.0
+        rsi = indicators.get("rsi", 50)
+        price = indicators.get("current_price", 0)
+        sma_50 = indicators.get("sma_50", 0)
+        sma_200 = indicators.get("sma_200", 0)
+        macd = indicators.get("macd", 0)
+        macd_signal = indicators.get("macd_signal", 0)
+        vol_sma = indicators.get("volume_sma", 1)
+        current_vol = indicators.get("current_volume", 0)
+
+        # RSI
+        if rsi < 30:
+            score += 15
+        elif rsi > 70:
+            score -= 15
+
+        # Price vs SMAs
+        if sma_50 > 0 and price > sma_50:
+            score += 10
+        if sma_200 > 0 and price > sma_200:
+            score += 15
+
+        # MACD
+        if macd > macd_signal:
+            score += 12
+
+        # Volume surge
+        if vol_sma > 0 and current_vol > vol_sma * 1.5:
+            score += 10
+
+        # Daily change momentum
+        change = indicators.get("daily_change_pct", 0)
+        if 0 < change < 5:
+            score += 5
+        elif change > 5:
+            score += 8  # Strong momentum (but also risky)
+
+        # Min price filter
+        if price < 10:
+            score -= 20
+
+        return score
 
     def _score_stock(self, ticker: str, indicators: Dict, company_info: Dict,
                      portfolio_holdings: Dict = None) -> StockScore:
