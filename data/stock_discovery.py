@@ -186,26 +186,60 @@ class StockDiscoveryEngine:
     def get_unusual_volume(self, tickers: List[str], volume_multiplier: float = 2.0) -> List[str]:
         """
         Scan a list of tickers for unusual volume (2x+ average).
-        This detects institutional buying/selling activity.
+        Uses batch download instead of individual calls to avoid rate limits.
         """
+        if not tickers:
+            return []
+
         unusual = []
 
-        for ticker in tickers:
-            try:
-                time.sleep(0.8)  # Rate limit
-                stock = yf.Ticker(ticker)
-                hist = stock.history(period="1mo")
-                if hist.empty or len(hist) < 5:
+        try:
+            # Use batch download — 1-2 API calls instead of 50 individual calls
+            chunk_size = 25
+            chunks = [tickers[i:i + chunk_size] for i in range(0, len(tickers), chunk_size)]
+
+            for chunk in chunks:
+                try:
+                    ticker_str = " ".join(chunk)
+                    data = yf.download(
+                        ticker_str,
+                        period="1mo",
+                        interval="1d",
+                        group_by="ticker",
+                        threads=False,
+                        progress=False,
+                        auto_adjust=True,
+                    )
+                    if data.empty:
+                        continue
+
+                    for ticker in chunk:
+                        try:
+                            if len(chunk) == 1:
+                                hist = data
+                            else:
+                                if ticker not in data.columns.get_level_values(0):
+                                    continue
+                                hist = data[ticker]
+
+                            hist = hist.dropna(subset=["Close"])
+                            if hist.empty or len(hist) < 5:
+                                continue
+
+                            avg_vol = hist["Volume"].iloc[:-1].mean()
+                            today_vol = hist["Volume"].iloc[-1]
+                            if avg_vol > 0 and today_vol > avg_vol * volume_multiplier:
+                                unusual.append(ticker)
+                        except Exception:
+                            continue
+
+                except Exception:
+                    # Rate limited or error — skip this chunk
+                    time.sleep(5)
                     continue
 
-                avg_vol = hist["Volume"].iloc[:-1].mean()
-                today_vol = hist["Volume"].iloc[-1]
-
-                if avg_vol > 0 and today_vol > avg_vol * volume_multiplier:
-                    unusual.append(ticker)
-
-            except Exception:
-                continue
+        except Exception as e:
+            logger.warning(f"Unusual volume scan error: {e}")
 
         logger.info(f"Unusual volume: found {len(unusual)} stocks out of {len(tickers)} scanned")
         return unusual
@@ -267,40 +301,75 @@ class StockDiscoveryEngine:
 
     def scan_breakouts(self, tickers: List[str]) -> List[str]:
         """
-        Scan tickers for technical breakouts:
+        Scan tickers for technical breakouts using batch download:
         - 52-week high breakouts
         - SMA crossover (50/200 golden cross)
-        - RSI recovery from oversold
         """
+        if not tickers:
+            return []
+
         breakouts = []
 
-        for ticker in tickers:
-            try:
-                time.sleep(0.8)  # Rate limit
-                stock = yf.Ticker(ticker)
-                hist = stock.history(period="6mo")
-                if hist.empty or len(hist) < 50:
+        try:
+            # Use batch download — 1-2 API calls instead of 30 individual calls
+            chunk_size = 25
+            chunks = [tickers[i:i + chunk_size] for i in range(0, len(tickers), chunk_size)]
+
+            for chunk in chunks:
+                try:
+                    ticker_str = " ".join(chunk)
+                    data = yf.download(
+                        ticker_str,
+                        period="6mo",
+                        interval="1d",
+                        group_by="ticker",
+                        threads=False,
+                        progress=False,
+                        auto_adjust=True,
+                    )
+                    if data.empty:
+                        continue
+
+                    for ticker in chunk:
+                        try:
+                            if len(chunk) == 1:
+                                hist = data
+                            else:
+                                if ticker not in data.columns.get_level_values(0):
+                                    continue
+                                hist = data[ticker]
+
+                            hist = hist.dropna(subset=["Close"])
+                            if hist.empty or len(hist) < 50:
+                                continue
+
+                            close = hist["Close"]
+                            high_52w = close.rolling(252).max().iloc[-1] if len(close) >= 252 else close.max()
+
+                            # Check: within 3% of 52-week high
+                            current = close.iloc[-1]
+                            if high_52w > 0 and current >= high_52w * 0.97:
+                                breakouts.append(ticker)
+                                continue
+
+                            # Check: SMA50 crosses above SMA200 (golden cross)
+                            if len(close) >= 200:
+                                sma50 = close.rolling(50).mean()
+                                sma200 = close.rolling(200).mean()
+                                if (sma50.iloc[-1] > sma200.iloc[-1] and
+                                    sma50.iloc[-2] <= sma200.iloc[-2]):
+                                    breakouts.append(ticker)
+
+                        except Exception:
+                            continue
+
+                except Exception:
+                    # Rate limited or error — skip this chunk
+                    time.sleep(5)
                     continue
 
-                close = hist["Close"]
-                high_52w = close.rolling(252).max().iloc[-1] if len(close) >= 252 else close.max()
-
-                # Check: within 3% of 52-week high
-                current = close.iloc[-1]
-                if high_52w > 0 and current >= high_52w * 0.97:
-                    breakouts.append(ticker)
-                    continue
-
-                # Check: SMA50 crosses above SMA200 (golden cross)
-                if len(close) >= 200:
-                    sma50 = close.rolling(50).mean()
-                    sma200 = close.rolling(200).mean()
-                    if (sma50.iloc[-1] > sma200.iloc[-1] and
-                        sma50.iloc[-2] <= sma200.iloc[-2]):
-                        breakouts.append(ticker)
-
-            except Exception:
-                continue
+        except Exception as e:
+            logger.warning(f"Breakout scan error: {e}")
 
         logger.info(f"Breakout scanner: found {len(breakouts)} breakouts")
         return breakouts
@@ -356,6 +425,7 @@ class StockDiscoveryEngine:
 
         # ── Strategy 5: Unusual Volume (sample from index) ──
         logger.info("  📦 Strategy 5: Scanning for unusual volume...")
+        time.sleep(3)  # Let Yahoo's rate limit settle before batch download
         # Scan a sample of 50 index stocks for volume surges
         import random
         sample = random.sample(list(index_tickers), min(50, len(index_tickers)))
@@ -366,6 +436,7 @@ class StockDiscoveryEngine:
 
         # ── Strategy 6: Breakout Scanner (sample) ──
         logger.info("  💥 Strategy 6: Scanning for technical breakouts...")
+        time.sleep(3)  # Let rate limit settle between strategies
         breakout_sample = random.sample(list(index_tickers), min(30, len(index_tickers)))
         breakouts = self.scan_breakouts(breakout_sample)
         for t in breakouts:
