@@ -213,6 +213,9 @@ class AIInvestmentBank:
         self.market_data = MarketDataFetcher(ticker_list)
         self.tracker.market_data = self.market_data  # Update tracker with fresh data
         logger.info(f"   → Found {len(ticker_list)} stocks")
+        # Cooldown: let Yahoo's rate limit reset before screening starts batch download
+        logger.info("   ⏳ Cooling down 10s before screening (rate limit protection)...")
+        time.sleep(10)
         return ticker_list
 
     # ── STEP 2: SCREEN ──
