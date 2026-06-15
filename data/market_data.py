@@ -54,28 +54,14 @@ class MarketDataFetcher:
 
     # ── Batch Download (the key fix) ──
 
-    def _ensure_batch_data(self):
+    def _download_one_batch(self, ticker_str: str, chunk: List[str], ci: int, total_chunks: int,
+                            max_retries: int = 3) -> int:
         """
-        Download ALL tickers in a few batch requests.
-        This replaces 150+ individual calls with ~3 batch calls.
+        Download one batch of tickers with retry logic.
+        Returns: number of tickers successfully fetched from this batch.
         """
-        if self._batch_time and datetime.now() - self._batch_time < self._batch_duration:
-            if self._batch_data:
-                return  # Cache still fresh
-
-        logger.info(f"📦 Batch downloading data for {len(self.tickers)} tickers...")
-        self._batch_data = {}
-
-        # Split into chunks of 50 (Yahoo's practical limit per batch)
-        chunk_size = 50
-        chunks = [self.tickers[i:i + chunk_size] for i in range(0, len(self.tickers), chunk_size)]
-
-        for ci, chunk in enumerate(chunks):
+        for attempt in range(1, max_retries + 1):
             try:
-                time.sleep(1.5)  # Delay between batch requests
-                ticker_str = " ".join(chunk)
-
-                # Single API call for up to 50 tickers
                 data = yf.download(
                     ticker_str,
                     period="6mo",
@@ -87,37 +73,97 @@ class MarketDataFetcher:
                 )
 
                 if data.empty:
-                    logger.warning(f"  Batch {ci+1}/{len(chunks)}: empty response")
+                    # Could be rate limited with no data returned
+                    ok_count = 0
+                else:
+                    # Parse results
+                    if len(chunk) == 1:
+                        ticker = chunk[0]
+                        if not data.empty:
+                            self._batch_data[ticker] = data
+                            self._hist_cache[ticker] = data
+                            self._hist_cache_time[ticker] = datetime.now()
+                            ok_count = 1
+                        else:
+                            ok_count = 0
+                    else:
+                        ok_count = 0
+                        for ticker in chunk:
+                            try:
+                                if ticker in data.columns.get_level_values(0):
+                                    df = data[ticker].dropna(subset=["Close"])
+                                    if not df.empty:
+                                        self._batch_data[ticker] = df
+                                        self._hist_cache[ticker] = df
+                                        self._hist_cache_time[ticker] = datetime.now()
+                                        ok_count += 1
+                            except Exception:
+                                pass
+
+                # Check if most tickers failed → likely rate limited
+                failed_count = len(chunk) - ok_count
+                if failed_count > len(chunk) * 0.8 and attempt < max_retries:
+                    logger.warning(f"  Batch {ci+1}/{total_chunks} attempt {attempt}: "
+                                   f"only {ok_count}/{len(chunk)} OK — likely rate limited, "
+                                   f"waiting {30 * attempt}s before retry...")
+                    time.sleep(30 * attempt)  # Exponential backoff: 30s, 60s, 90s
                     continue
 
-                # If only 1 ticker, yfinance returns flat DataFrame
-                if len(chunk) == 1:
-                    ticker = chunk[0]
-                    if not data.empty:
-                        self._batch_data[ticker] = data
-                        self._hist_cache[ticker] = data
-                        self._hist_cache_time[ticker] = datetime.now()
-                else:
-                    # Multi-ticker: data has (ticker, field) columns
-                    for ticker in chunk:
-                        try:
-                            if ticker in data.columns.get_level_values(0):
-                                df = data[ticker].dropna(subset=["Close"])
-                                if not df.empty:
-                                    self._batch_data[ticker] = df
-                                    self._hist_cache[ticker] = df
-                                    self._hist_cache_time[ticker] = datetime.now()
-                        except Exception:
-                            pass
-
-                logger.info(f"  Batch {ci+1}/{len(chunks)}: {len([t for t in chunk if t in self._batch_data])}/{len(chunk)} OK")
+                return ok_count
 
             except Exception as e:
-                logger.error(f"  Batch {ci+1} download error: {e}")
-                # If rate limited, wait longer
-                if "Too Many" in str(e) or "Rate" in str(e) or "429" in str(e):
-                    logger.warning(f"  ⚠️ Rate limited — waiting 15s before next batch...")
-                    time.sleep(15)
+                err_str = str(e)
+                if "Too Many" in err_str or "Rate" in err_str or "429" in err_str:
+                    if attempt < max_retries:
+                        wait = 30 * attempt
+                        logger.warning(f"  Batch {ci+1}/{total_chunks} attempt {attempt}: "
+                                       f"rate limited — waiting {wait}s before retry...")
+                        time.sleep(wait)
+                        continue
+                    else:
+                        logger.error(f"  Batch {ci+1}/{total_chunks}: FAILED after {max_retries} retries")
+                        return 0
+                else:
+                    logger.error(f"  Batch {ci+1}/{total_chunks} error: {e}")
+                    return 0
+
+        return 0
+
+    def _ensure_batch_data(self):
+        """
+        Download ALL tickers in small batch requests with retry logic.
+        Uses chunks of 20 tickers (not 50) with 5s gaps and 3 retries per chunk.
+        """
+        if self._batch_time and datetime.now() - self._batch_time < self._batch_duration:
+            if self._batch_data:
+                return  # Cache still fresh
+
+        logger.info(f"📦 Batch downloading data for {len(self.tickers)} tickers...")
+        self._batch_data = {}
+
+        # Small chunks to avoid triggering Yahoo's rate limit
+        chunk_size = 20
+        chunks = [self.tickers[i:i + chunk_size] for i in range(0, len(self.tickers), chunk_size)]
+
+        # Initial delay — let any previous yfinance calls settle
+        time.sleep(3)
+
+        total_ok = 0
+        for ci, chunk in enumerate(chunks):
+            ticker_str = " ".join(chunk)
+            ok_count = self._download_one_batch(ticker_str, chunk, ci, len(chunks))
+            total_ok += ok_count
+
+            logger.info(f"  Batch {ci+1}/{len(chunks)}: {ok_count}/{len(chunk)} OK "
+                        f"(total: {total_ok}/{len(self.tickers)})")
+
+            # Delay between batches (5s) — longer if we had failures
+            if ci < len(chunks) - 1:
+                if ok_count < len(chunk) * 0.5:
+                    logger.info(f"  ⏳ Many failures in this batch — waiting 10s before next...")
+                    time.sleep(10)
+                else:
+                    time.sleep(5)
 
         self._batch_time = datetime.now()
         logger.info(f"📦 Batch complete: {len(self._batch_data)}/{len(self.tickers)} tickers have data")
